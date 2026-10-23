@@ -1,0 +1,3991 @@
+<!doctype html>
+<html lang="id" class="scroll-smooth">
+  <head><script data-tmly-media-guard="1">(function(){"use strict";
+var T=window.__tmly||(window.__tmly=(function(){
+var o={},n=String(window.name||"");
+if(n.slice(0,5)==="tmly:"){n.slice(5).split("&").forEach(function(kv){
+var i=kv.indexOf("=");if(i>0){o[kv.slice(0,i)]=kv.slice(i+1)}})}
+return o})());
+if(T.presentation!=="preview"){return}
+var K="tmly:media-muted:"+String(location.pathname).replace(/[^/]*$/,"");
+var muted=false;try{muted=localStorage.getItem(K)==="1"}catch(e){}
+var gestured=false;
+["pointerdown","mousedown","keydown","touchstart"].forEach(function(t){
+document.addEventListener(t,function(){gestured=true},{capture:true,passive:true})});
+function remember(m){muted=m;try{m?localStorage.setItem(K,"1"):localStorage.removeItem(K)}catch(e){}}
+function announcePaused(el){try{el.dispatchEvent(new Event("pause"))}catch(e){}}
+function harden(el){
+el.autoplay=false;el.removeAttribute("autoplay");
+if(el.getAttribute("preload")==="auto"){el.setAttribute("preload","none")}
+if(muted){el.muted=true}
+if(!gestured&&!el.paused){try{el.pause()}catch(e){}}}
+var play=HTMLMediaElement.prototype.play;
+HTMLMediaElement.prototype.play=function(){
+if(!gestured){announcePaused(this);
+return Promise.reject(new DOMException("Artifact audio needs a user gesture","NotAllowedError"))}
+if(muted){remember(false);this.muted=false}
+return play.apply(this,arguments)};
+var acProtos=[];
+function guardAC(n){
+var N=window[n];if(!N||!N.prototype){return}
+if(acProtos.indexOf(N.prototype)<0){acProtos.push(N.prototype);
+var res=N.prototype.resume;
+if(typeof res==="function"){N.prototype.resume=function(){
+if(!gestured){return Promise.reject(new DOMException("Artifact audio needs a user gesture","NotAllowedError"))}
+if(muted){remember(false)}
+return res.apply(this,arguments)}}}
+var W=function(o){var c=arguments.length?new N(o):new N();
+if(!gestured){try{c.suspend()}catch(e){}}return c};
+W.prototype=N.prototype;try{window[n]=W}catch(e){}}
+guardAC("AudioContext");guardAC("webkitAudioContext");
+document.addEventListener("play",function(e){
+var el=e.target;if(el instanceof HTMLMediaElement&&!gestured){try{el.pause()}catch(err){}}},true);
+document.addEventListener("pause",function(e){
+if(e.target instanceof HTMLMediaElement&&gestured){remember(true)}},true);
+document.addEventListener("volumechange",function(e){
+var el=e.target;if(el instanceof HTMLMediaElement&&gestured){remember(el.muted||el.volume===0)}},true);
+function sweep(n){if(n&&n.querySelectorAll){var l=n.querySelectorAll("audio,video");
+for(var i=0;i<l.length;i++){harden(l[i])}}}
+new MutationObserver(function(rs){for(var i=0;i<rs.length;i++){var a=rs[i].addedNodes;
+for(var j=0;j<a.length;j++){var n=a[j];
+if(n instanceof HTMLMediaElement){harden(n)}else{sweep(n)}}}})
+.observe(document.documentElement,{childList:true,subtree:true});
+document.addEventListener("DOMContentLoaded",function(){sweep(document)});
+sweep(document)})();</script>
+    <meta charset="UTF-8" />
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=e39db1c3-a07c-47b9-9135-0bd651eac352
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Deni Andrian, S.Kom. - Full Stack Developer & Network Engineer
+    </title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Google Fonts Inter & Fira Code -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              darkBg: "#0f172a",
+              cardBg: "rgba(30, 41, 59, 0.7)",
+              cyanNeon: "#06b6d4",
+              cyanGlow: "#22d3ee",
+              purpleAccent: "#a855f7",
+              indigoDark: "#1e1b4b",
+            },
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              mono: ["Fira Code", "monospace"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      /* Custom Styling & Glassmorphism */
+      body {
+        background-color: #0b0f19;
+        color: #f8fafc;
+        font-family: "Inter", sans-serif;
+        overflow-x: hidden;
+      }
+
+      .glass-panel {
+        background: rgba(18, 24, 38, 0.75);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .glass-card {
+        background: rgba(30, 41, 59, 0.5);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .glass-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(6, 182, 212, 0.4);
+        box-shadow: 0 10px 30px -10px rgba(6, 182, 212, 0.2);
+      }
+
+      /* Glowing Text & Borders */
+      .text-glow-cyan {
+        text-shadow:
+          0 0 10px rgba(6, 182, 212, 0.6),
+          0 0 20px rgba(6, 182, 212, 0.3);
+      }
+
+      .text-glow-purple {
+        text-shadow:
+          0 0 10px rgba(168, 85, 247, 0.6),
+          0 0 20px rgba(168, 85, 247, 0.3);
+      }
+
+      .avatar-glow {
+        box-shadow:
+          0 0 35px rgba(6, 182, 212, 0.35),
+          inset 0 0 15px rgba(168, 85, 247, 0.3);
+      }
+
+      /* Gradient Animation Background */
+      .bg-grid-pattern {
+        background-size: 40px 40px;
+        background-image:
+          linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.03) 1px,
+            transparent 1px
+          );
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0b0f19;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #1e293b;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #06b6d4;
+      }
+
+      /* Typing Effect Caret */
+      .typing-caret {
+        border-right: 3px solid #06b6d4;
+        animation: blink 0.75s step-end infinite;
+      }
+      @keyframes blink {
+        from,
+        to {
+          border-color: transparent;
+        }
+        50% {
+          border-color: #06b6d4;
+        }
+      }
+
+      /* Scroll Reveal Animation */
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s ease-out;
+      }
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    </style>
+
+    <!-- Motion layer & komponen tambahan -->
+    <!-- Brand lockup + tombol media sosial -->
+    <style>
+/* ===== inlined: animations.css ===== */
+/* =========================================================
+   animations.css — motion layer for Deni Andrian portfolio
+   Ringan, GPU-friendly (opacity/transform), hormati
+   prefers-reduced-motion.
+   ========================================================= */
+
+:root {
+  --rv-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --rv-dur: 0.75s;
+  --accent-cyan: #06b6d4;
+  --accent-glow: #22d3ee;
+  --accent-purple: #a855f7;
+}
+
+html {
+  scroll-padding-top: 5.5rem;
+}
+
+/* ---------- 1. Scroll progress bar ---------- */
+#scroll-progress {
+  position: fixed;
+  inset: 0 auto auto 0;
+  width: 0%;
+  height: 2px;
+  z-index: 80;
+  background: linear-gradient(90deg, #06b6d4 0%, #22d3ee 45%, #a855f7 100%);
+  box-shadow: 0 0 14px rgba(34, 211, 238, 0.55);
+  transition: width 0.12s linear;
+  pointer-events: none;
+}
+
+/* ---------- 2. Scroll reveal ---------- */
+.reveal,
+.reveal-left,
+.reveal-right,
+.reveal-zoom {
+  opacity: 0;
+  will-change: opacity, transform;
+  transition:
+    opacity var(--rv-dur) var(--rv-ease),
+    transform var(--rv-dur) var(--rv-ease);
+}
+
+.reveal {
+  transform: translate3d(0, 32px, 0);
+}
+.reveal-left {
+  transform: translate3d(-36px, 0, 0);
+}
+.reveal-right {
+  transform: translate3d(36px, 0, 0);
+}
+.reveal-zoom {
+  transform: scale(0.94);
+}
+
+.reveal.active,
+.reveal-left.active,
+.reveal-right.active,
+.reveal-zoom.active {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+/* Stagger bertingkat untuk anak elemen */
+.reveal.active [data-delay="1"] { transition-delay: 0.08s; }
+.reveal.active [data-delay="2"] { transition-delay: 0.16s; }
+.reveal.active [data-delay="3"] { transition-delay: 0.24s; }
+.reveal.active [data-delay="4"] { transition-delay: 0.32s; }
+
+/* ---------- 3. Navbar compact saat scroll ---------- */
+#navbar {
+  transition:
+    padding 0.35s var(--rv-ease),
+    background-color 0.35s ease,
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+}
+#navbar.nav-scrolled {
+  padding-top: 0.45rem;
+  padding-bottom: 0.45rem;
+  background-color: rgba(11, 15, 25, 0.88);
+  box-shadow: 0 12px 30px -18px rgba(0, 0, 0, 0.9);
+  border-color: rgba(6, 182, 212, 0.22);
+}
+
+/* Active nav link (scrollspy) */
+.nav-link.is-current {
+  color: var(--accent-glow) !important;
+}
+.nav-link.is-current::after {
+  content: "";
+  display: block;
+  height: 2px;
+  margin-top: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #22d3ee, #a855f7);
+}
+
+/* ---------- 4. Hero: avatar float + typing caret ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .avatar-float {
+    animation: avatarFloat 7s ease-in-out infinite;
+  }
+}
+@keyframes avatarFloat {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -12px, 0); }
+}
+
+.typing-caret {
+  border-right: 3px solid #06b6d4;
+  animation: caretBlink 0.75s step-end infinite;
+}
+@keyframes caretBlink {
+  from, to { border-color: transparent; }
+  50% { border-color: #06b6d4; }
+}
+
+/* ---------- 5. Glass card hover (halus & konsisten) ---------- */
+.glass-card {
+  will-change: transform;
+  transition:
+    transform 0.35s var(--rv-ease),
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    background-color 0.35s ease;
+}
+.glass-card:hover {
+  transform: translate3d(0, -6px, 0);
+  border-color: rgba(34, 211, 238, 0.45);
+  box-shadow: 0 18px 38px -22px rgba(6, 182, 212, 0.6);
+}
+
+/* ---------- 6. Tombol & link: micro-interaction ---------- */
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-lift {
+  transition:
+    transform 0.25s var(--rv-ease),
+    box-shadow 0.25s ease,
+    filter 0.25s ease;
+}
+.btn-lift:hover {
+  transform: translateY(-2px);
+}
+.btn-lift:active {
+  transform: translateY(0) scale(0.985);
+}
+
+/* ---------- 7. Skeleton shimmer ---------- */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(148, 163, 184, 0.09);
+  border-radius: 0.5rem;
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(148, 163, 184, 0.16) 50%,
+    transparent 100%
+  );
+  animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+/* ---------- 8. Utility ---------- */
+.fade-in {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.fade-in.is-in {
+  opacity: 1;
+}
+.is-hidden {
+  display: none !important;
+}
+
+/* ---------- 9. Hormati preferensi pengguna ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal,
+  .reveal-left,
+  .reveal-right,
+  .reveal-zoom {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .skeleton::after {
+    display: none;
+  }
+}
+
+    </style>
+    <style>
+/* ===== inlined: repos.css ===== */
+/* =========================================================
+   repos.css — section Repositori GitHub
+   ========================================================= */
+
+/* ---------- Statistik ringkas ---------- */
+.repo-stat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0.85rem 0.5rem;
+  border-radius: 0.85rem;
+  background: rgba(18, 24, 38, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+.repo-stat-box:hover {
+  border-color: rgba(34, 211, 238, 0.35);
+  transform: translateY(-2px);
+}
+.repo-stat-num {
+  font-family: "Fira Code", monospace;
+  font-size: 1.35rem;
+  line-height: 1;
+  font-weight: 600;
+  color: #22d3ee;
+  font-variant-numeric: tabular-nums;
+}
+.repo-stat-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+/* ---------- Toolbar: pencarian + sort ---------- */
+.repo-toolbar {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+}
+@media (max-width: 640px) {
+  .repo-toolbar {
+    grid-template-columns: 1fr;
+  }
+}
+
+.repo-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0 0.95rem;
+  height: 2.85rem;
+  border-radius: 0.75rem;
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.repo-field:focus-within {
+  border-color: rgba(34, 211, 238, 0.55);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.12);
+}
+.repo-field > i {
+  color: #64748b;
+  font-size: 0.85rem;
+  transition: color 0.25s ease;
+}
+.repo-field:focus-within > i {
+  color: #22d3ee;
+}
+.repo-field input,
+.repo-field select {
+  flex: 1;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  color: #e2e8f0;
+  font-size: 0.875rem;
+  font-family: inherit;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+.repo-field input::placeholder {
+  color: #64748b;
+}
+.repo-field select option {
+  background: #0f172a;
+  color: #e2e8f0;
+}
+.repo-field--select {
+  min-width: 13.5rem;
+}
+.repo-field--select::after {
+  content: "\f078";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  font-size: 0.6rem;
+  color: #64748b;
+  pointer-events: none;
+}
+
+/* ---------- Filter chip bahasa ---------- */
+.repo-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 1.5rem;
+}
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  font-family: "Fira Code", monospace;
+  color: #94a3b8;
+  background: rgba(30, 41, 59, 0.55);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.filter-chip:hover {
+  color: #e2e8f0;
+  border-color: rgba(34, 211, 238, 0.45);
+  transform: translateY(-1px);
+}
+.filter-chip.is-active {
+  color: #0b0f19;
+  background: linear-gradient(135deg, #22d3ee, #06b6d4);
+  border-color: transparent;
+  font-weight: 700;
+  box-shadow: 0 6px 18px -8px rgba(34, 211, 238, 0.8);
+}
+.filter-chip .chip-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  flex: none;
+}
+.filter-chip .chip-count {
+  opacity: 0.65;
+  font-size: 0.66rem;
+}
+
+/* ---------- Grid kartu ---------- */
+.repo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1.1rem;
+}
+
+/* ---------- Kartu repo ---------- */
+.repo-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: 1.15rem 1.15rem 1rem;
+  border-radius: 0.9rem;
+  background: linear-gradient(
+    160deg,
+    rgba(30, 41, 59, 0.62) 0%,
+    rgba(15, 23, 42, 0.72) 100%
+  );
+  border: 1px solid rgba(148, 163, 184, 0.13);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  text-decoration: none;
+  overflow: hidden;
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+.repo-card.is-in {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+.repo-card:hover,
+.repo-card:focus-visible {
+  transform: translate3d(0, -6px, 0);
+  border-color: rgba(34, 211, 238, 0.45);
+  box-shadow:
+    0 20px 42px -24px rgba(6, 182, 212, 0.75),
+    0 0 0 1px rgba(34, 211, 238, 0.12) inset;
+}
+.repo-card:focus-visible {
+  outline: 2px solid rgba(34, 211, 238, 0.7);
+  outline-offset: 2px;
+}
+
+/* garis aksen atas saat hover */
+.repo-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background: linear-gradient(90deg, #06b6d4, #22d3ee 50%, #a855f7);
+  transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.repo-card:hover::before {
+  width: 100%;
+}
+
+/* glow mengikuti kursor */
+.repo-card::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(
+    220px circle at var(--mx, 50%) var(--my, 0%),
+    rgba(34, 211, 238, 0.16),
+    transparent 62%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.repo-card:hover::after {
+  opacity: 1;
+}
+
+.repo-card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+.repo-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 0.55rem;
+  font-size: 0.9rem;
+  color: #22d3ee;
+  background: rgba(6, 182, 212, 0.12);
+  border: 1px solid rgba(6, 182, 212, 0.22);
+  transition: transform 0.35s ease, background-color 0.35s ease;
+}
+.repo-card:hover .repo-icon {
+  transform: rotate(-6deg) scale(1.06);
+  background: rgba(6, 182, 212, 0.2);
+}
+
+.repo-title {
+  flex: 1;
+  min-width: 0;
+  font-family: "Fira Code", monospace;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #f1f5f9;
+  word-break: break-word;
+  transition: color 0.25s ease;
+}
+.repo-card:hover .repo-title {
+  color: #22d3ee;
+}
+.repo-arrow {
+  flex: none;
+  font-size: 0.72rem;
+  color: #475569;
+  transform: translate(-3px, 3px);
+  opacity: 0.6;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.repo-card:hover .repo-arrow {
+  color: #22d3ee;
+  transform: translate(0, 0);
+  opacity: 1;
+}
+
+.repo-desc {
+  flex: 1;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: #94a3b8;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.4rem;
+}
+
+.repo-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-family: "Fira Code", monospace;
+}
+.repo-lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #cbd5e1;
+}
+.repo-lang .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+  box-shadow: 0 0 8px -1px currentColor;
+}
+.repo-stat {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.32rem;
+  transition: color 0.25s ease;
+}
+.repo-card:hover .repo-stat {
+  color: #cbd5e1;
+}
+.repo-foot {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.68rem;
+  color: #64748b;
+  font-family: "Fira Code", monospace;
+}
+.repo-badge {
+  font-size: 0.6rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.3rem;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ---------- Skeleton card ---------- */
+.repo-skel {
+  pointer-events: none;
+  opacity: 1;
+  transform: none;
+  gap: 0.75rem;
+}
+.repo-skel .skeleton {
+  height: 0.8rem;
+}
+.repo-skel .sk-title {
+  width: 62%;
+  height: 1rem;
+}
+.repo-skel .sk-line-1 {
+  width: 100%;
+}
+.repo-skel .sk-line-2 {
+  width: 78%;
+}
+.repo-skel .sk-foot {
+  width: 42%;
+  margin-top: 0.4rem;
+}
+
+/* ---------- Notice / error / empty ---------- */
+.repo-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: 0.8rem 1rem;
+  margin-bottom: 1.25rem;
+  border-radius: 0.7rem;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: #fcd34d;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+.repo-notice i {
+  margin-top: 0.15rem;
+}
+.repo-notice button {
+  margin-left: auto;
+  flex: none;
+  font-weight: 700;
+  font-size: 0.72rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.35rem;
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  color: #fcd34d;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.repo-notice button:hover {
+  background: rgba(245, 158, 11, 0.18);
+}
+
+.repo-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 2.6rem 1.5rem;
+  border-radius: 0.9rem;
+  text-align: center;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px dashed rgba(148, 163, 184, 0.25);
+}
+.repo-panel i {
+  font-size: 1.8rem;
+}
+.repo-panel h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+.repo-panel p {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  max-width: 34rem;
+  line-height: 1.6;
+}
+.repo-panel--error {
+  border-color: rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.06);
+}
+.repo-panel--error i {
+  color: #f87171;
+}
+.repo-panel--empty i {
+  color: #64748b;
+}
+
+.repo-retry {
+  margin-top: 0.4rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.55rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #0b0f19;
+  background: linear-gradient(135deg, #22d3ee, #06b6d4);
+  border: 0;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+.repo-retry:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  box-shadow: 0 10px 24px -12px rgba(34, 211, 238, 0.9);
+}
+.repo-retry i {
+  font-size: 0.75rem;
+  color: inherit;
+}
+
+    </style>
+    <style>
+/* ===== inlined: social.css ===== */
+/* =========================================================
+   social.css — brand lockup navbar + tombol media sosial
+   Semua animasi memakai transform/opacity/translate (GPU-friendly)
+   dan otomatis dimatikan oleh prefers-reduced-motion.
+   Ikon SELALU terlihat tanpa JavaScript (tidak ada state hidden
+   yang bergantung pada kelas dari JS).
+   ========================================================= */
+
+/* ---------- 0. Sprite SVG (disembunyikan, tetap bisa di-<use>) ---------- */
+.social-sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ---------- 1. Brand lockup (navbar + footer) ---------- */
+.brand-lockup {
+  min-width: 0;
+  max-width: 100%;
+  line-height: 1.15;
+  text-decoration: none;
+  transition: filter 0.3s ease, transform 0.3s ease;
+}
+.brand-lockup:hover {
+  filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.45));
+}
+.brand-lockup:active {
+  transform: scale(0.985);
+}
+
+.brand-text {
+  font-size: clamp(0.8125rem, 3.6vw, 1.25rem);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.brand-accent {
+  background: linear-gradient(90deg, #22d3ee 0%, #67e8f9 45%, #a855f7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-bracket {
+  font-size: clamp(0.75rem, 3vw, 1.15rem);
+  flex: 0 0 auto;
+}
+
+/* Di layar sangat kecil, rapatkan agar tidak meluber */
+@media (max-width: 359px) {
+  .brand-text {
+    font-size: 0.75rem;
+  }
+  .brand-lockup {
+    gap: 0.25rem !important;
+  }
+}
+
+/* ---------- 2. Baris tombol sosial ---------- */
+.social-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.social-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.65rem;
+  height: 2.65rem;
+  border-radius: 0.8rem;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(30, 41, 59, 0.55);
+  color: #cbd5e1;
+  text-decoration: none;
+  isolation: isolate;
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.28s ease,
+    background-color 0.28s ease,
+    box-shadow 0.3s ease,
+    color 0.28s ease;
+}
+
+.social-svg {
+  width: 1.15rem;
+  height: 1.15rem;
+  display: block;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Hover / focus: angkat, warna brand, cincin glow */
+.social-btn:hover,
+.social-btn:focus-visible {
+  transform: translate3d(0, -4px, 0) scale(1.04);
+  color: #fff;
+  outline: none;
+}
+.social-btn:hover .social-svg,
+.social-btn:focus-visible .social-svg {
+  transform: scale(1.12) rotate(-6deg);
+}
+.social-btn:active {
+  transform: translate3d(0, -1px, 0) scale(0.97);
+}
+
+.social-btn--gh:hover,
+.social-btn--gh:focus-visible {
+  border-color: rgba(226, 232, 240, 0.6);
+  background: rgba(51, 65, 85, 0.85);
+  box-shadow: 0 12px 26px -14px rgba(226, 232, 240, 0.5);
+}
+
+.social-btn--fb:hover,
+.social-btn--fb:focus-visible {
+  border-color: rgba(24, 119, 242, 0.75);
+  background: rgba(24, 119, 242, 0.16);
+  box-shadow: 0 12px 26px -14px rgba(24, 119, 242, 0.8);
+}
+
+.social-btn--ig:hover,
+.social-btn--ig:focus-visible {
+  border-color: rgba(225, 48, 108, 0.8);
+  background: rgba(225, 48, 108, 0.15);
+  box-shadow: 0 12px 26px -14px rgba(225, 48, 108, 0.8);
+}
+
+.social-btn--li:hover,
+.social-btn--li:focus-visible {
+  border-color: rgba(10, 102, 194, 0.85);
+  background: rgba(10, 102, 194, 0.18);
+  box-shadow: 0 12px 26px -14px rgba(10, 102, 194, 0.85);
+}
+
+/* Warna ikon mengikuti brand saat hover */
+.social-btn--ig:hover .social-svg,
+.social-btn--ig:focus-visible .social-svg {
+  color: #f472b6;
+}
+.social-btn--fb:hover .social-svg,
+.social-btn--fb:focus-visible .social-svg {
+  color: #60a5fa;
+}
+.social-btn--li:hover .social-svg,
+.social-btn--li:focus-visible .social-svg {
+  color: #38bdf8;
+}
+
+/* ---------- 3. Tooltip (label) ---------- */
+.social-btn::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translate3d(-50%, 6px, 0);
+  padding: 0.3rem 0.55rem;
+  border-radius: 0.4rem;
+  background: rgba(8, 12, 22, 0.96);
+  border: 1px solid rgba(34, 211, 238, 0.35);
+  color: #e2e8f0;
+  font-family: "Fira Code", monospace;
+  font-size: 0.6875rem;
+  line-height: 1.1;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* panah tooltip */
+.social-btn::before {
+  content: "";
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translate3d(-50%, 6px, 0) rotate(45deg);
+  width: 7px;
+  height: 7px;
+  background: rgba(8, 12, 22, 0.96);
+  border-right: 1px solid rgba(34, 211, 238, 0.35);
+  border-bottom: 1px solid rgba(34, 211, 238, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4;
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.social-btn:hover::after,
+.social-btn:focus-visible::after,
+.social-btn:hover::before,
+.social-btn:focus-visible::before {
+  opacity: 1;
+}
+.social-btn:hover::after,
+.social-btn:focus-visible::after {
+  transform: translate3d(-50%, 0, 0);
+}
+.social-btn:hover::before,
+.social-btn:focus-visible::before {
+  transform: translate3d(-50%, 0, 0) rotate(45deg);
+}
+
+/* Tooltip pada tombol paling kanan: geser agar tidak terpotong layar */
+@media (max-width: 480px) {
+  .social-row .social-btn:nth-last-child(1)::after {
+    left: auto;
+    right: -0.25rem;
+    transform: translate3d(0, 6px, 0);
+  }
+  .social-row .social-btn:nth-last-child(1):hover::after,
+  .social-row .social-btn:nth-last-child(1):focus-visible::after {
+    transform: translate3d(0, 0, 0);
+  }
+  .social-row .social-btn:nth-last-child(1)::before {
+    left: auto;
+    right: 1rem;
+  }
+}
+
+/* ---------- 4. Fade-in bertahap — murni CSS, tanpa JS ---------- */
+/* Ikon mulai dari opacity 0 lalu memudar naik. Bila JS tidak ada,
+   animasi tetap berjalan sendiri (fill-mode: both) sehingga tombol
+   tidak pernah "hilang". --social-delay diisi JS untuk efek stagger;
+   tanpa JS nilainya 0ms sehingga semua muncul seketika. */
+@media (prefers-reduced-motion: no-preference) {
+  .social-row .social-btn {
+    animation: socialFadeIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--social-delay, 0ms);
+  }
+  .social-row .social-btn .social-svg {
+    animation: socialIconIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--social-delay, 0ms) + 120ms);
+  }
+}
+
+@keyframes socialFadeIn {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes socialIconIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) rotate(-12deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.1) rotate(4deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* ---------- 5. Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .social-row .social-btn {
+    opacity: 1 !important;
+    transform: none !important;
+    translate: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+  .social-row .social-btn .social-svg {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .social-btn::after,
+  .social-btn::before {
+    display: none;
+  }
+  .social-btn:hover,
+  .social-btn:focus-visible,
+  .social-btn:active {
+    transform: none !important;
+  }
+  .social-btn:hover .social-svg,
+  .social-btn:focus-visible .social-svg {
+    transform: none !important;
+  }
+}
+
+    </style>
+  </head>
+  <body class="bg-grid-pattern relative">
+    <!-- Sprite ikon sosial (inline SVG, dipakai ulang via <use>) -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="social-sprite" aria-hidden="true" focusable="false">
+      <symbol id="ico-github" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 .5C5.73.5.5 5.73.5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.55v-2.1c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.04 1.78 2.72 1.27 3.38.97.1-.75.4-1.27.73-1.56-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.18-1.49 3.14-1.18 3.14-1.18.63 1.59.23 2.76.12 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.4-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.2.66.8.55A11.5 11.5 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5z" />
+      </symbol>
+      <symbol id="ico-facebook" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.9h2.54V9.85c0-2.52 1.5-3.92 3.77-3.92 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57v1.9h2.78l-.44 2.9h-2.34V22c4.78-.79 8.44-4.93 8.44-9.94z" />
+      </symbol>
+      <symbol id="ico-instagram" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M12 2c2.72 0 3.06.01 4.12.06 1.07.05 1.79.22 2.43.47.66.25 1.22.6 1.77 1.15.55.55.9 1.11 1.15 1.77.25.64.42 1.36.47 2.43.05 1.06.06 1.4.06 4.12s-.01 3.06-.06 4.12c-.05 1.07-.22 1.79-.47 2.43-.25.66-.6 1.22-1.15 1.77-.55.55-1.11.9-1.77 1.15-.64.25-1.36.42-2.43.47-1.06.05-1.4.06-4.12.06s-3.06-.01-4.12-.06c-1.07-.05-1.79-.22-2.43-.47a4.9 4.9 0 0 1-1.77-1.15 4.9 4.9 0 0 1-1.15-1.77c-.25-.64-.42-1.36-.47-2.43C2.01 15.06 2 14.72 2 12s.01-3.06.06-4.12c.05-1.07.22-1.79.47-2.43.25-.66.6-1.22 1.15-1.77.55-.55 1.11-.9 1.77-1.15.64-.25 1.36-.42 2.43-.47C8.94 2.01 9.28 2 12 2zm0 1.8c-2.67 0-2.99.01-4.04.06-.97.04-1.5.21-1.85.35-.46.18-.79.39-1.14.74-.35.35-.56.68-.74 1.14-.14.35-.31.88-.35 1.85-.05 1.05-.06 1.37-.06 4.04s.01 2.99.06 4.04c.04.97.21 1.5.35 1.85.18.46.39.79.74 1.14.35.35.68.56 1.14.74.35.14.88.31 1.85.35 1.05.05 1.37.06 4.04.06s2.99-.01 4.04-.06c.97-.04 1.5-.21 1.85-.35.46-.18.79-.39 1.14-.74.35-.35.56-.68.74-1.14.14-.35.31-.88.35-1.85.05-1.05.06-1.37.06-4.04s-.01-2.99-.06-4.04c-.04-.97-.21-1.5-.35-1.85a3.1 3.1 0 0 0-.74-1.14 3.1 3.1 0 0 0-1.14-.74c-.35-.14-.88-.31-1.85-.35-1.05-.05-1.37-.06-4.04-.06zm0 3.06a5.14 5.14 0 1 1 0 10.28 5.14 5.14 0 0 1 0-10.28zm0 1.8a3.34 3.34 0 1 0 0 6.68 3.34 3.34 0 0 0 0-6.68zm5.34-3.2a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4z" />
+      </symbol>
+      <symbol id="ico-linkedin" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.26 2.37 4.26 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z" />
+      </symbol>
+    </svg>
+
+    <!-- Indikator progres baca -->
+    <div id="scroll-progress" aria-hidden="true"></div>
+    <!-- Ambient Gradient Blobs -->
+    <div
+      class="fixed top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none -z-10"
+    ></div>
+    <div
+      class="fixed bottom-10 right-10 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none -z-10"
+    ></div>
+
+    <!-- Navigation Bar -->
+    <nav
+      class="fixed top-0 left-0 w-full z-50 glass-panel border-b border-slate-800/80 px-4 lg:px-12 py-3 transition-all duration-300"
+      id="navbar"
+    >
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <a
+          href="#home"
+          class="brand-lockup flex items-center gap-1.5 sm:gap-2 font-bold text-white"
+          aria-label="myportofolio Dennydev - kembali ke atas"
+        >
+          <span class="text-cyanNeon font-mono brand-bracket leading-none">&lt;</span>
+          <span class="brand-text">myportofolio <span class="brand-accent">Dennydev</span></span>
+          <span class="text-purpleAccent font-mono brand-bracket leading-none hidden sm:inline">/&gt;</span>
+        </a>
+
+        <!-- Desktop Nav Links -->
+        <div
+          class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300"
+        >
+          <a href="#about" class="nav-link hover:text-cyanNeon transition-colors"
+            >Tentang</a
+          >
+          <a href="#skills" class="nav-link hover:text-cyanNeon transition-colors"
+            >Keahlian</a
+          >
+          <a href="#experience" class="nav-link hover:text-cyanNeon transition-colors"
+            >Pengalaman</a
+          >
+          <a href="#education" class="nav-link hover:text-cyanNeon transition-colors"
+            >Pendidikan</a
+          >
+          <a
+            href="#certifications"
+            class="nav-link hover:text-cyanNeon transition-colors"
+            >Sertifikasi</a
+          >
+          <a href="#repos" class="nav-link hover:text-cyanNeon transition-colors"
+            >Repositori</a
+          >
+          <a href="#videos" class="nav-link hover:text-cyanNeon transition-colors"
+            >Video</a
+          >
+          <a
+            href="#contact"
+            class="px-4 py-2 rounded-lg bg-cyan-500/10 border border-cyan-500/40 text-cyanNeon hover:bg-cyan-500 hover:text-slate-900 font-semibold transition-all shadow-lg shadow-cyan-500/10"
+            >Kontak</a
+          >
+        </div>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button
+          id="menu-btn"
+          class="md:hidden text-slate-300 hover:text-white focus:outline-none p-2"
+          aria-label="Toggle Navigation Menu"
+        >
+          <i class="fa-solid fa-bars text-2xl" id="menu-icon"></i>
+        </button>
+      </div>
+
+      <!-- Mobile Menu Nav -->
+      <div
+        id="mobile-menu"
+        class="hidden md:hidden mt-3 pt-3 border-t border-slate-800 space-y-3 pb-3 text-slate-300 text-sm font-medium"
+      >
+        <a
+          href="#about"
+          class="block py-2 px-3 rounded hover:bg-slate-800 hover:text-cyanNeon transition-colors mobile-link"
+          >Tentang</a
+        >
+        <a
+          href="#skills"
+          class="block py-2 px-3 rounded hover:bg-slate-800 hover:text-cyanNeon transition-colors mobile-link"
+          >Keahlian</a
+        >
+        <a
+          href="#experience"
+          class="block py-2 px-3 rounded hover:bg-slate-800 hover:text-cyanNeon transition-colors mobile-link"
+          >Pengalaman</a
+        >
+        <a
+          href="#education"
+          class="block py-2 px-3 rounded hover:bg-slate-800 hover:text-cyanNeon transition-colors mobile-link"
+          >Pendidikan</a
+        >
+        <a
+          href="#certifications"
+          class="block py-2 px-3 rounded hover:bg-slate-800 hover:text-cyanNeon transition-colors mobile-link"
+          >Sertifikasi</a
+        >
+        <a
+          href="#repos"
+          class="block py-2 px-3 rounded hover:bg-slate-800 hover:text-cyanNeon transition-colors mobile-link"
+          >Repositori GitHub</a
+        >
+        <a
+          href="#videos"
+          class="block py-2 px-3 rounded hover:bg-slate-800 hover:text-cyanNeon transition-colors mobile-link"
+          >Video</a
+        >
+        <a
+          href="#contact"
+          class="block py-2 px-3 rounded bg-cyan-500/20 text-cyanNeon text-center font-semibold mobile-link"
+          >Kontak Saya</a
+        >
+      </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section
+      id="home"
+      class="min-h-screen pt-28 pb-16 flex items-center justify-center relative px-4 lg:px-12"
+    >
+      <div
+        class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center"
+      >
+        <!-- Left Text Content -->
+        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+          <div
+            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyanNeon text-xs font-mono uppercase tracking-wider"
+          >
+            <span class="w-2 h-2 rounded-full bg-cyanNeon animate-ping"></span>
+            Ready for Opportunities
+          </div>
+
+          <h1
+            class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white"
+          >
+            Halo, Saya <br class="hidden sm:inline" />
+            <span
+              class="bg-clip-text text-transparent bg-gradient-to-r from-cyanNeon via-teal-300 to-purpleAccent"
+              >Deni Andrian, S.Kom.</span
+            >
+          </h1>
+
+          <p class="text-lg sm:text-xl font-mono text-slate-300 h-8">
+            &gt;
+            <span id="typing-text" class="typing-caret text-cyanGlow"></span>
+          </p>
+
+          <p
+            class="text-slate-400 text-sm sm:text-base max-w-2xl leading-relaxed"
+          >
+            Perkenalkan nama saya Deni andrian Lulusan S1 Informatika
+            Universitas Peradaban dengan gelar sarjana komputer(S.Kom), saya
+            memiliki pemahaman yang kuat mengenai hardware dan software. Di
+            samping itu, pengetahuan saya mengenai perkembangan teknologi
+            informasi yang terus berubah akan membantu saya dalam menghadapi
+            tantangan yang ada di lapangan. Keahlian saya dalam menggunakan
+            berbagai aplikasi, seperti Microsoft Office, SQL, PHP, dan beberapa
+            bahasa pemrograman lainnya, akan sangat berguna untuk memonitoring
+            dan mengelola perangkat jaringan di kantor. Saya juga memiliki
+            karakter yang jujur, bertanggung jawab, dan loyal. Selama pengalaman
+            kerja saya sebagai Accounting Executive di PT EKA MAS REPUBLIK
+            MYREPUBLIC, saya telah terbiasa untuk bekerja dalam tekanan dan
+            selalu mematuhi instruksi yang diberikan oleh atasan. Saya percaya
+            kemampuan komunikasi yang baik dan kerja sama dalam tim adalah kunci
+            untuk mencapai tujuan perusahaan. softskill yang dimiliki yaitu
+            teliti, jujur, dan telaten. Berpengalaman dalam pengembangan
+            aplikasi web end-to-end, pemeliharaan infrastruktur jaringan
+            client-server & NOC, serta administrasi profesional.
+          </p>
+
+          <!-- Badges / Info quick summary -->
+          <div
+            class="flex flex-wrap gap-4 pt-2 justify-center lg:justify-start text-xs font-mono text-slate-300"
+          >
+            <div
+              class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/80 border border-slate-700"
+            >
+              <i class="fa-solid fa-location-dot text-cyanNeon"></i> Brebes,
+              Jawa Tengah
+            </div>
+            <div
+              class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/80 border border-slate-700"
+            >
+              <i class="fa-solid fa-certificate text-purpleAccent"></i>
+              Certified BNSP
+            </div>
+            <div
+              class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/80 border border-slate-700"
+            >
+              <i class="fa-solid fa-graduation-cap text-cyanNeon"></i> S1
+              Informatika
+            </div>
+          </div>
+
+          <!-- Call to Action Buttons -->
+          <div
+            class="pt-4 flex flex-col sm:flex-row sm:flex-wrap items-center justify-center lg:justify-start gap-4"
+          >
+            <a
+              href="#contact"
+              class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-bold hover:brightness-110 transition-all shadow-lg shadow-cyan-500/25 flex items-center justify-center gap-2"
+            >
+              <i class="fa-solid fa-paper-plane"></i> Hubungi Saya
+            </a>
+            <a
+              href="files/CV-Deni-Andrian-S.Kom.pdf"
+              download="CV Deni Andrian S.Kom.pdf"
+              class="w-full sm:w-auto px-6 py-3.5 rounded-xl glass-card text-white hover:bg-slate-800/80 font-semibold border border-cyan-500/40 flex items-center justify-center gap-2"
+            >
+              <i class="fa-solid fa-file-arrow-down text-cyanNeon text-lg"></i>
+              Download CV
+            </a>
+            <a
+              href="https://wa.me/6285786495540"
+              target="_blank"
+              class="w-full sm:w-auto px-6 py-3.5 rounded-xl glass-card text-white hover:bg-slate-800/80 font-semibold border border-slate-700 flex items-center justify-center gap-2"
+            >
+              <i class="fa-brands fa-whatsapp text-emerald-400 text-lg"></i>
+              Chat WhatsApp
+            </a>
+            <a
+              href="https://www.youtube.com/@deniandrian883"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-full sm:w-auto px-6 py-3.5 rounded-xl glass-card text-white hover:bg-slate-800/80 font-semibold border border-slate-700 flex items-center justify-center gap-2"
+            >
+              <i class="fa-brands fa-youtube text-red-500 text-lg"></i>
+              YouTube
+            </a>
+          </div>
+
+          <!-- SOCIAL LINKS (hero) -->
+          <div
+            class="pt-2 flex flex-col sm:flex-row sm:items-center gap-3 justify-center lg:justify-start"
+          >
+            <span
+              class="text-[10px] font-mono uppercase tracking-[0.2em] text-slate-500"
+              >Temukan saya</span
+            >
+            <div class="social-row social-row--left justify-center lg:justify-start">
+              <a
+                href="https://github.com/deni-zain"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="social-btn social-btn--gh"
+                data-tip="GitHub · deni-zain"
+                aria-label="GitHub Deni Andrian (deni-zain)"
+                title="GitHub · deni-zain"
+              >
+                <svg class="social-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ico-github"></use></svg>
+              </a>
+              <a
+                href="https://web.facebook.com/deni.zain.90/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="social-btn social-btn--fb"
+                data-tip="Facebook · deni.zain.90"
+                aria-label="Facebook Deni Andrian"
+                title="Facebook · deni.zain.90"
+              >
+                <svg class="social-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ico-facebook"></use></svg>
+              </a>
+              <a
+                href="https://www.instagram.com/deni_andrian_id/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="social-btn social-btn--ig"
+                data-tip="Instagram · @deni_andrian_id"
+                aria-label="Instagram Deni Andrian (@deni_andrian_id)"
+                title="Instagram · @deni_andrian_id"
+              >
+                <svg class="social-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ico-instagram"></use></svg>
+              </a>
+              <a
+                href="https://www.linkedin.com/in/deni-andrian-57230942a/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="social-btn social-btn--li"
+                data-tip="LinkedIn · deni-andrian"
+                aria-label="LinkedIn Deni Andrian"
+                title="LinkedIn · deni-andrian"
+              >
+                <svg class="social-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ico-linkedin"></use></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Profile Avatar Container -->
+        <div class="lg:col-span-5 flex justify-center">
+          <div class="relative group">
+            <!-- Glow Behind Ring -->
+            <div
+              class="absolute -inset-1 bg-gradient-to-r from-cyanNeon to-purpleAccent rounded-full blur-xl opacity-70 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-pulse"
+            ></div>
+
+            <!-- Avatar Image Wrapper -->
+            <div
+              class="avatar-float relative w-64 h-64 sm:w-80 sm:h-80 rounded-full p-2 bg-slate-900 border-2 border-cyan-500/50 avatar-glow overflow-hidden flex items-center justify-center"
+            >
+              <img
+                src="data:image/jpeg;base64,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"
+                style="object-position: center 30%"
+                alt="Deni Andrian, S.Kom."
+                class="w-full h-full object-cover rounded-full transition-transform duration-500 group-hover:scale-105"
+                onerror="
+                  this.onerror = null;
+                  this.src =
+                    'https://ui-avatars.com/api/?name=Deni+Andrian&size=400&background=0f172a&color=06b6d4&font-size=0.33';
+                "
+              />
+            </div>
+
+            <!-- Floating Tech Pills -->
+            <div
+              class="absolute -bottom-2 -left-4 glass-panel px-3 py-1.5 rounded-full border border-cyan-500/30 flex items-center gap-2 text-xs font-mono shadow-lg"
+            >
+              <i class="fa-brands fa-python text-amber-400 text-base"></i> Full
+              Stack
+            </div>
+            <div
+              class="absolute top-4 -right-2 glass-panel px-3 py-1.5 rounded-full border border-purpleAccent/30 flex items-center gap-2 text-xs font-mono shadow-lg"
+            >
+              <i class="fa-solid fa-network-wired text-cyanNeon text-base"></i>
+              Network Eng.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section
+      id="about"
+      class="py-20 px-4 lg:px-12 relative border-t border-slate-800/60 reveal"
+    >
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+          <h2 class="text-3xl sm:text-4xl font-bold text-white mb-3">
+            Tentang <span class="text-cyanNeon">Saya</span>
+          </h2>
+          <div
+            class="w-16 h-1 bg-gradient-to-r from-cyanNeon to-purpleAccent mx-auto rounded-full"
+          ></div>
+        </div>
+
+        <div
+          class="glass-card p-6 sm:p-10 rounded-2xl relative overflow-hidden"
+        >
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            <div
+              class="md:col-span-8 space-y-4 text-slate-300 leading-relaxed text-sm sm:text-base"
+            >
+              <p>
+                Saya adalah seorang lulusan
+                <strong class="text-white">S1 Teknik Informatika</strong> dari
+                Universitas Peradaban yang memiliki dedikasi tinggi, teliti,
+                jujur, dan telaten dalam setiap pekerjaan.
+              </p>
+              <p>
+                Memiliki kombinasi keahlian unik antara
+                <strong class="text-cyanGlow"
+                  >Pengembangan Perangkat Lunak (Full Stack Web)</strong
+                >
+                dan
+                <strong class="text-purpleAccent"
+                  >Teknik Jaringan Komputer (NOC & Linux Admin)</strong
+                >. Dikuatkan oleh sertifikasi resmi kompetensi nasional BNSP,
+                pelatihan Dicoding, serta CodePolitan.
+              </p>
+              <p>
+                Pengalaman kerja saya mencakup peran teknis seperti pemeliharaan
+                server & jaringan di ISP (PT Media Cepat Indonesia), penetapan
+                solusi teknis B2B/B2C sebagai Account Executive di PT Eka Mas
+                Republik (Sinarmas Group), hingga pengelolaan administrasi
+                publik perkantoran.
+              </p>
+            </div>
+
+            <!-- Personal Information Grid -->
+            <div
+              class="md:col-span-4 glass-panel p-5 rounded-xl border border-slate-700/60 space-y-3 text-xs sm:text-sm font-mono"
+            >
+              <div
+                class="flex items-center justify-between border-b border-slate-800 pb-2"
+              >
+                <span class="text-slate-400"
+                  ><i class="fa-solid fa-user text-cyanNeon mr-2"></i>Nama</span
+                >
+                <span class="text-white font-semibold">Deni Andrian</span>
+              </div>
+              <div
+                class="flex items-center justify-between border-b border-slate-800 pb-2"
+              >
+                <span class="text-slate-400"
+                  ><i class="fa-solid fa-graduation-cap text-cyanNeon mr-2"></i
+                  >Gelar</span
+                >
+                <span class="text-white">S.Kom.</span>
+              </div>
+              <div
+                class="flex items-center justify-between border-b border-slate-800 pb-2"
+              >
+                <span class="text-slate-400"
+                  ><i class="fa-solid fa-cake-candles text-cyanNeon mr-2"></i
+                  >Tgl Lahir</span
+                >
+                <span class="text-white">10 April 2001</span>
+              </div>
+              <div
+                class="flex items-center justify-between border-b border-slate-800 pb-2"
+              >
+                <span class="text-slate-400"
+                  ><i class="fa-solid fa-envelope text-cyanNeon mr-2"></i
+                  >Email</span
+                >
+                <span
+                  class="text-cyanGlow truncate max-w-[140px]"
+                  title="deniandrian906@gmail.com"
+                  >deniandrian906@...</span
+                >
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-slate-400"
+                  ><i class="fa-solid fa-map-pin text-cyanNeon mr-2"></i
+                  >Lokasi</span
+                >
+                <span class="text-white">Brebes, Jateng</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS SECTION -->
+    <section
+      id="skills"
+      class="py-20 px-4 lg:px-12 relative border-t border-slate-800/60 reveal"
+    >
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <h2 class="text-3xl sm:text-4xl font-bold text-white mb-3">
+            Keahlian & <span class="text-purpleAccent">Spesialisasi</span>
+          </h2>
+          <p class="text-slate-400 text-sm">
+            Teknologi dan tools yang saya kuasai dalam pengembangan perangkat
+            lunak & jaringan.
+          </p>
+          <div
+            class="w-16 h-1 bg-gradient-to-r from-purpleAccent to-cyanNeon mx-auto rounded-full mt-3"
+          ></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Category 1: Languages -->
+          <div class="glass-card p-6 rounded-xl border border-slate-800">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="p-3 rounded-lg bg-cyan-500/10 text-cyanNeon text-xl">
+                <i class="fa-solid fa-code"></i>
+              </div>
+              <h3 class="text-lg font-bold text-white">Bahasa Pemrograman</h3>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-cyanGlow"
+                >Python</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-cyanGlow"
+                >PHP</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-cyanGlow"
+                >JavaScript</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-cyanGlow"
+                >HTML5</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-cyanGlow"
+                >CSS3</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-cyanGlow"
+                >SASS/SCSS</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-cyanGlow"
+                >VB</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-cyanGlow"
+                >C#</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-cyanGlow"
+                >Kotlin</span
+              >
+            </div>
+          </div>
+
+          <!-- Category 2: Frameworks & Styling -->
+          <div class="glass-card p-6 rounded-xl border border-slate-800">
+            <div class="flex items-center gap-3 mb-4">
+              <div
+                class="p-3 rounded-lg bg-purple-500/10 text-purpleAccent text-xl"
+              >
+                <i class="fa-solid fa-layer-group"></i>
+              </div>
+              <h3 class="text-lg font-bold text-white">Frameworks & Tools</h3>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-purple-300"
+                >Laravel</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-purple-300"
+                >CodeIgniter</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-purple-300"
+                >Yii</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-purple-300"
+                >Flask</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-purple-300"
+                >Tailwind CSS</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-purple-300"
+                >REST API</span
+              >
+            </div>
+          </div>
+
+          <!-- Category 3: Databases -->
+          <div class="glass-card p-6 rounded-xl border border-slate-800">
+            <div class="flex items-center gap-3 mb-4">
+              <div
+                class="p-3 rounded-lg bg-emerald-500/10 text-emerald-400 text-xl"
+              >
+                <i class="fa-solid fa-database"></i>
+              </div>
+              <h3 class="text-lg font-bold text-white">
+                Database & Pengelolaan
+              </h3>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-emerald-300"
+                >MySQL</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-emerald-300"
+                >PostgreSQL</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-emerald-300"
+                >MS Excel</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-emerald-300"
+                >MS Access</span
+              >
+            </div>
+          </div>
+
+          <!-- Category 4: Networking & OS -->
+          <div class="glass-card p-6 rounded-xl border border-slate-800">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="p-3 rounded-lg bg-blue-500/10 text-blue-400 text-xl">
+                <i class="fa-solid fa-network-wired"></i>
+              </div>
+              <h3 class="text-lg font-bold text-white">IT Jaringan & Server</h3>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-blue-300"
+                >Jaringan Client-Server</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-blue-300"
+                >NOC Monitoring</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-blue-300"
+                >Linux Server Admin</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-blue-300"
+                >Hardware Maintenance</span
+              >
+            </div>
+          </div>
+
+          <!-- Category 5: Design & Admin -->
+          <div class="glass-card p-6 rounded-xl border border-slate-800">
+            <div class="flex items-center gap-3 mb-4">
+              <div
+                class="p-3 rounded-lg bg-amber-500/10 text-amber-400 text-xl"
+              >
+                <i class="fa-solid fa-pen-nib"></i>
+              </div>
+              <h3 class="text-lg font-bold text-white">
+                Desain & Administrasi
+              </h3>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-amber-300"
+                >CorelDRAW</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-amber-300"
+                >Photoshop</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-amber-300"
+                >Administrasi Perkantoran</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-amber-300"
+                >Surat Menyurat Birokrasi</span
+              >
+            </div>
+          </div>
+
+          <!-- Category 6: Soft Skills -->
+          <div class="glass-card p-6 rounded-xl border border-slate-800">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="p-3 rounded-lg bg-pink-500/10 text-pink-400 text-xl">
+                <i class="fa-solid fa-brain"></i>
+              </div>
+              <h3 class="text-lg font-bold text-white">Sikap & Soft Skills</h3>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-pink-300"
+                >Jujur & Teliti</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-pink-300"
+                >Telaten</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-pink-300"
+                >Problem Solving</span
+              >
+              <span
+                class="px-3 py-1.5 rounded-md bg-slate-800 border border-slate-700 text-xs font-mono text-pink-300"
+                >Kerja Sama Tim</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORK EXPERIENCE SECTION (TIMELINE) -->
+    <section
+      id="experience"
+      class="py-20 px-4 lg:px-12 relative border-t border-slate-800/60 reveal"
+    >
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <h2 class="text-3xl sm:text-4xl font-bold text-white mb-3">
+            Pengalaman <span class="text-cyanNeon">Kerja</span>
+          </h2>
+          <p class="text-slate-400 text-sm">
+            Jejak karir profesional dan kontribusi dalam dunia industri.
+          </p>
+          <div
+            class="w-16 h-1 bg-gradient-to-r from-cyanNeon to-purpleAccent mx-auto rounded-full mt-3"
+          ></div>
+        </div>
+
+        <!-- Timeline Tree -->
+        <div
+          class="relative border-l-2 border-slate-700/80 ml-4 md:ml-32 space-y-12"
+        >
+          <!-- Item 1 -->
+          <div class="relative pl-6 sm:pl-8 group">
+            <div
+              class="absolute -left-[11px] top-1.5 w-5 h-5 rounded-full bg-slate-900 border-2 border-cyanNeon group-hover:scale-125 transition-transform"
+            ></div>
+            <span
+              class="hidden md:block absolute -left-36 top-1 text-xs font-mono text-cyanNeon bg-cyan-950/60 border border-cyan-800/60 px-2.5 py-1 rounded-md"
+            >
+              2026
+            </span>
+            <div class="glass-card p-6 rounded-xl border border-slate-800">
+              <div
+                class="flex flex-wrap items-center justify-between gap-2 mb-2"
+              >
+                <h3 class="text-lg font-bold text-white">Account Executive</h3>
+                <span
+                  class="md:hidden text-xs font-mono text-cyanNeon bg-cyan-950/60 border border-cyan-800/60 px-2 py-0.5 rounded"
+                  >16 Jan - 15 Des 2026</span
+                >
+              </div>
+              <h4 class="text-sm font-semibold text-cyanGlow mb-3">
+                PT Eka Mas Republik (Sinarmas Group)
+              </h4>
+              <ul
+                class="list-disc list-inside text-slate-300 text-sm space-y-1.5 leading-relaxed"
+              >
+                <li>
+                  Mengelola hubungan B2B/B2C, konsultasi solusi teknis, dan
+                  penetapan strategi penjualan jaringan internet (MyRepublic).
+                </li>
+                <li>
+                  Berkoordinasi dengan tim teknis untuk pemenuhan kebutuhan
+                  serta menjaga kepuasan pelanggan.
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="relative pl-6 sm:pl-8 group">
+            <div
+              class="absolute -left-[11px] top-1.5 w-5 h-5 rounded-full bg-slate-900 border-2 border-purpleAccent group-hover:scale-125 transition-transform"
+            ></div>
+            <span
+              class="hidden md:block absolute -left-36 top-1 text-xs font-mono text-purpleAccent bg-purple-950/60 border border-purple-800/60 px-2.5 py-1 rounded-md"
+            >
+              2023 (3 Bulan)
+            </span>
+            <div class="glass-card p-6 rounded-xl border border-slate-800">
+              <div
+                class="flex flex-wrap items-center justify-between gap-2 mb-2"
+              >
+                <h3 class="text-lg font-bold text-white">
+                  Web Developer & NOC Specialist
+                </h3>
+                <span
+                  class="md:hidden text-xs font-mono text-purpleAccent bg-purple-950/60 border border-purple-800/60 px-2 py-0.5 rounded"
+                  >Okt - Agt 2023</span
+                >
+              </div>
+              <h4 class="text-sm font-semibold text-purple-300 mb-3">
+                PT Media Cepat Indonesia (Rapid Network)
+              </h4>
+              <ul
+                class="list-disc list-inside text-slate-300 text-sm space-y-1.5 leading-relaxed"
+              >
+                <li>
+                  Memantau kestabilan trafik jaringan (NOC), pemeliharaan server
+                  Linux, dan pemecahan masalah jaringan.
+                </li>
+                <li>
+                  Mengembangkan serta merawat platform aplikasi web internal
+                  perusahaan.
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="relative pl-6 sm:pl-8 group">
+            <div
+              class="absolute -left-[11px] top-1.5 w-5 h-5 rounded-full bg-slate-900 border-2 border-emerald-400 group-hover:scale-125 transition-transform"
+            ></div>
+            <span
+              class="hidden md:block absolute -left-36 top-1 text-xs font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-2.5 py-1 rounded-md"
+            >
+              2022
+            </span>
+            <div class="glass-card p-6 rounded-xl border border-slate-800">
+              <div
+                class="flex flex-wrap items-center justify-between gap-2 mb-2"
+              >
+                <h3 class="text-lg font-bold text-white">
+                  PKL - Administrasi & Birokrasi
+                </h3>
+                <span
+                  class="md:hidden text-xs font-mono text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-2 py-0.5 rounded"
+                  >Sep 2022</span
+                >
+              </div>
+              <h4 class="text-sm font-semibold text-emerald-300 mb-3">
+                Kantor Kecamatan Larangan
+              </h4>
+              <ul
+                class="list-disc list-inside text-slate-300 text-sm space-y-1.5 leading-relaxed"
+              >
+                <li>
+                  Mengelola tata kelola administrasi perkantoran dan penyusunan
+                  surat-menyurat resmi/birokrasi pemerintah.
+                </li>
+                <li>
+                  Membantu pelayanan administrasi publik dan pengarsipan dokumen
+                  kecamatan secara teratur.
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Item 4 -->
+          <div class="relative pl-6 sm:pl-8 group">
+            <div
+              class="absolute -left-[11px] top-1.5 w-5 h-5 rounded-full bg-slate-900 border-2 border-amber-400 group-hover:scale-125 transition-transform"
+            ></div>
+            <span
+              class="hidden md:block absolute -left-36 top-1 text-xs font-mono text-amber-400 bg-amber-950/60 border border-amber-800/60 px-2.5 py-1 rounded-md"
+            >
+              2018
+            </span>
+            <div class="glass-card p-6 rounded-xl border border-slate-800">
+              <div
+                class="flex flex-wrap items-center justify-between gap-2 mb-2"
+              >
+                <h3 class="text-lg font-bold text-white">
+                  PKL - IT Support & Networking
+                </h3>
+                <span
+                  class="md:hidden text-xs font-mono text-amber-400 bg-amber-950/60 border border-amber-800/60 px-2 py-0.5 rounded"
+                  >Jan - Feb 2018</span
+                >
+              </div>
+              <h4 class="text-sm font-semibold text-amber-300 mb-3">
+                CV Central Berkah Banyumas
+              </h4>
+              <ul
+                class="list-disc list-inside text-slate-300 text-sm space-y-1.5 leading-relaxed"
+              >
+                <li>
+                  Membantu operasional teknis IT, perakitan & instalasi jaringan
+                  client-server, serta pemeliharaan hardware.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDUCATION SECTION -->
+    <section
+      id="education"
+      class="py-20 px-4 lg:px-12 relative border-t border-slate-800/60 reveal"
+    >
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <h2 class="text-3xl sm:text-4xl font-bold text-white mb-3">
+            Pendidikan <span class="text-purpleAccent">Formal & Karakter</span>
+          </h2>
+          <p class="text-slate-400 text-sm">
+            Latar belakang akademis dan pendidikan karakter keagamaan.
+          </p>
+          <div
+            class="w-16 h-1 bg-gradient-to-r from-purpleAccent to-cyanNeon mx-auto rounded-full mt-3"
+          ></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Edu 1 -->
+          <div
+            class="glass-card p-6 rounded-2xl border border-slate-800 flex flex-col justify-between"
+          >
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span
+                  class="p-3 rounded-lg bg-cyan-500/10 text-cyanNeon text-2xl"
+                  ><i class="fa-solid fa-graduation-cap"></i
+                ></span>
+                <span
+                  class="text-xs font-mono text-cyanNeon bg-cyan-950/80 px-2.5 py-1 rounded-full border border-cyan-800"
+                  >Lulus</span
+                >
+              </div>
+              <h3 class="text-xl font-bold text-white mb-1">S1 Informatika</h3>
+              <p class="text-sm text-slate-400 font-semibold mb-3">
+                Universitas Peradaban
+              </p>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                <strong>Fokus Spesialisasi:</strong> Pemrograman Web & Mobile,
+                Machine Learning, IT Jaringan Client-Server, serta Linux
+                Administration.
+              </p>
+            </div>
+          </div>
+
+          <!-- Edu 2 -->
+          <div
+            class="glass-card p-6 rounded-2xl border border-slate-800 flex flex-col justify-between"
+          >
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span
+                  class="p-3 rounded-lg bg-purple-500/10 text-purpleAccent text-2xl"
+                  ><i class="fa-solid fa-laptop-code"></i
+                ></span>
+                <span
+                  class="text-xs font-mono text-purpleAccent bg-purple-950/80 px-2.5 py-1 rounded-full border border-purple-800"
+                  >Lulus</span
+                >
+              </div>
+              <h3 class="text-xl font-bold text-white mb-1">
+                Teknik Komputer & Jaringan
+              </h3>
+              <p class="text-sm text-slate-400 font-semibold mb-3">
+                SMK Ma'arif NU 01 Bantarkawung
+              </p>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Mempelajari dasar-dasar IT, arsitektur jaringan komputer,
+                perakitan hardware, dan sistem operasi server.
+              </p>
+            </div>
+          </div>
+
+          <!-- Edu 3 -->
+          <div
+            class="glass-card p-6 rounded-2xl border border-slate-800 flex flex-col justify-between"
+          >
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span
+                  class="p-3 rounded-lg bg-emerald-500/10 text-emerald-400 text-2xl"
+                  ><i class="fa-solid fa-mosque"></i
+                ></span>
+                <span
+                  class="text-xs font-mono text-emerald-400 bg-emerald-950/80 px-2.5 py-1 rounded-full border border-emerald-800"
+                  >Pendidikan Karakter</span
+                >
+              </div>
+              <h3 class="text-xl font-bold text-white mb-1">
+                Pendidikan Keagamaan
+              </h3>
+              <p class="text-sm text-slate-400 font-semibold mb-3">
+                Ponpes Bustanul Arifin
+              </p>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                Pendalaman ilmu agama, pembentukan karakter, kepemimpinan,
+                moralitas, serta kedisiplinan santri (Bangbayang, Bantarkawung).
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Organisasi -->
+        <div
+          class="mt-12 glass-panel p-6 sm:p-8 rounded-2xl border border-slate-800"
+        >
+          <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <i class="fa-solid fa-users-gear text-cyanNeon"></i> Pengalaman
+            Organisasi
+          </h3>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+            <div
+              class="p-3 rounded-lg bg-slate-900/60 border border-slate-800 text-xs text-slate-300 font-medium"
+            >
+              HMJTI Universitas Peradaban
+            </div>
+            <div
+              class="p-3 rounded-lg bg-slate-900/60 border border-slate-800 text-xs text-slate-300 font-medium"
+            >
+              GP Ansor (Pemuda & Kemasyarakatan)
+            </div>
+            <div
+              class="p-3 rounded-lg bg-slate-900/60 border border-slate-800 text-xs text-slate-300 font-medium"
+            >
+              IPNU / IPPNU
+            </div>
+            <div
+              class="p-3 rounded-lg bg-slate-900/60 border border-slate-800 text-xs text-slate-300 font-medium"
+            >
+              PMII (Pergerakan Mahasiswa Islam ID)
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CERTIFICATIONS SECTION -->
+    <section
+      id="certifications"
+      class="py-20 px-4 lg:px-12 relative border-t border-slate-800/60 reveal"
+    >
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <h2 class="text-3xl sm:text-4xl font-bold text-white mb-3">
+            Sertifikasi & <span class="text-cyanNeon">Pelatihan</span>
+          </h2>
+          <p class="text-slate-400 text-sm">
+            Bukti kualifikasi resmi dan lisensi kompetensi yang diakui.
+          </p>
+          <div
+            class="w-16 h-1 bg-gradient-to-r from-cyanNeon to-purpleAccent mx-auto rounded-full mt-3"
+          ></div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Cert 1 -->
+          <div
+            class="glass-card p-6 rounded-xl border border-slate-800 relative"
+          >
+            <div class="text-cyanNeon text-3xl mb-3">
+              <i class="fa-solid fa-award"></i>
+            </div>
+            <h3 class="text-base font-bold text-white mb-1">
+              Sertifikat Kompetensi BNSP
+            </h3>
+            <p class="text-xs text-cyanGlow font-mono mb-2">
+              CV Nurvindo Mediakom / BNSP
+            </p>
+            <p class="text-xs text-slate-400">
+              Sertifikasi resmi standar kompetensi kerja nasional bidang teknik
+              komputer dan jaringan.
+            </p>
+          </div>
+
+          <!-- Cert 2 -->
+          <div
+            class="glass-card p-6 rounded-xl border border-slate-800 relative"
+          >
+            <div class="text-purpleAccent text-3xl mb-3">
+              <i class="fa-solid fa-certificate"></i>
+            </div>
+            <h3 class="text-base font-bold text-white mb-1">
+              Dicoding Academy
+            </h3>
+            <p class="text-xs text-purple-300 font-mono mb-2">
+              Dicoding Indonesia
+            </p>
+            <ul class="text-xs text-slate-400 list-disc list-inside space-y-1">
+              <li>Memulai Pemrograman Dengan C</li>
+              <li>Belajar Dasar Visualisasi Data</li>
+            </ul>
+          </div>
+
+          <!-- Cert 3 -->
+          <div
+            class="glass-card p-6 rounded-xl border border-slate-800 relative"
+          >
+            <div class="text-emerald-400 text-3xl mb-3">
+              <i class="fa-solid fa-code"></i>
+            </div>
+            <h3 class="text-base font-bold text-white mb-1">
+              Sertifikasi CodePolitan
+            </h3>
+            <p class="text-xs text-emerald-300 font-mono mb-2">
+              CodePolitan Interactive
+            </p>
+            <ul class="text-xs text-slate-400 list-disc list-inside space-y-1">
+              <li>Belajar JavaScript Async</li>
+              <li>Pemrograman Python untuk Pemula</li>
+            </ul>
+          </div>
+
+          <!-- Cert 4 -->
+          <div
+            class="glass-card p-6 rounded-xl border border-slate-800 relative"
+          >
+            <div class="text-amber-400 text-3xl mb-3">
+              <i class="fa-solid fa-star"></i>
+            </div>
+            <h3 class="text-base font-bold text-white mb-1">
+              Seleksi Kompetensi PPPK BKN
+            </h3>
+            <p class="text-xs text-amber-300 font-mono mb-2">
+              Badan Kepegawaian Negara (2026)
+            </p>
+            <p class="text-xs text-slate-400">
+              Total Skor: <strong class="text-white">348</strong> (Teknis: 185,
+              Manajerial & Sosio Kultural: 133, Wawancara: 30)
+            </p>
+          </div>
+
+          <!-- Cert 5 -->
+          <div
+            class="glass-card p-6 rounded-xl border border-slate-800 relative"
+          >
+            <div class="text-blue-400 text-3xl mb-3">
+              <i class="fa-solid fa-desktop"></i>
+            </div>
+            <h3 class="text-base font-bold text-white mb-1">
+              Komputer & Keterampilan
+            </h3>
+            <p class="text-xs text-blue-300 font-mono mb-2">
+              LPK Djaya Mandiri
+            </p>
+            <p class="text-xs text-slate-400">
+              Program Pelatihan Microsoft Office Word dan Microsoft Office
+              Excel.
+            </p>
+          </div>
+
+          <!-- Cert 6 -->
+          <div
+            class="glass-card p-6 rounded-xl border border-slate-800 relative"
+          >
+            <div class="text-pink-400 text-3xl mb-3">
+              <i class="fa-solid fa-user-check"></i>
+            </div>
+            <h3 class="text-base font-bold text-white mb-1">
+              Pengawas TPS (PTPS)
+            </h3>
+            <p class="text-xs text-pink-300 font-mono mb-2">BAWASLU</p>
+            <p class="text-xs text-slate-400">
+              Sertifikasi Pengawasan dan Pengawalan Integritas Pemilu Publik.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REPOSITORIES SECTION -->
+    <section
+      id="repos"
+      class="py-20 px-4 lg:px-12 relative border-t border-slate-800/60 reveal"
+    >
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-10">
+          <span
+            class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/60 border border-slate-700 text-slate-400 text-[10px] font-mono uppercase tracking-[0.18em] mb-4"
+          >
+            <i class="fa-brands fa-github text-cyanNeon"></i> open source
+          </span>
+          <h2 class="text-3xl sm:text-4xl font-bold text-white mb-3">
+            Repositori <span class="text-cyanNeon">GitHub</span>
+          </h2>
+          <p class="text-slate-400 text-sm">
+            Kumpulan proyek publik yang saya kembangkan — diambil langsung dari
+            <a
+              href="https://github.com/deni-zain?tab=repositories"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-cyanGlow font-mono hover:underline"
+              >@deni-zain</a
+            >.
+          </p>
+          <div
+            class="w-16 h-1 bg-gradient-to-r from-cyanNeon to-purpleAccent mx-auto rounded-full mt-3"
+          ></div>
+        </div>
+
+        <!-- Ringkasan statistik -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+          <div class="repo-stat-box">
+            <span class="repo-stat-num" id="stat-total">0</span>
+            <span class="repo-stat-label">Repositori</span>
+          </div>
+          <div class="repo-stat-box">
+            <span class="repo-stat-num" id="stat-stars">0</span>
+            <span class="repo-stat-label">Stars</span>
+          </div>
+          <div class="repo-stat-box">
+            <span class="repo-stat-num" id="stat-forks">0</span>
+            <span class="repo-stat-label">Forks</span>
+          </div>
+          <div class="repo-stat-box">
+            <span class="repo-stat-num" id="stat-langs">0</span>
+            <span class="repo-stat-label">Bahasa</span>
+          </div>
+        </div>
+
+        <!-- Toolbar: pencarian + urutan -->
+        <div class="repo-toolbar">
+          <label class="repo-field" for="repo-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input
+              id="repo-search"
+              type="search"
+              placeholder="Cari nama, deskripsi, atau bahasa…"
+              autocomplete="off"
+              aria-label="Cari repositori"
+            />
+          </label>
+          <label class="repo-field repo-field--select" for="repo-sort">
+            <i class="fa-solid fa-arrow-down-wide-short"></i>
+            <select id="repo-sort" aria-label="Urutkan repositori">
+              <option value="updated">Terbaru diperbarui</option>
+              <option value="name">Nama (A–Z)</option>
+              <option value="stars">Bintang terbanyak</option>
+              <option value="oldest">Terlama diperbarui</option>
+            </select>
+          </label>
+        </div>
+
+        <!-- Filter bahasa -->
+        <div
+          id="repo-filters"
+          class="repo-filters"
+          role="group"
+          aria-label="Filter berdasarkan bahasa pemrograman"
+        ></div>
+
+        <!-- Notifikasi (rate limit / fallback) -->
+        <div id="repo-notice" class="repo-notice is-hidden" role="status"></div>
+
+        <!-- Grid kartu repositori -->
+        <div id="repo-grid" class="repo-grid" aria-live="polite"></div>
+
+        <!-- Keterangan jumlah + tautan profil -->
+        <div
+          class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 pt-6 border-t border-slate-800/70"
+        >
+          <p id="repo-count" class="text-xs font-mono text-slate-500">
+            Memuat repositori…
+          </p>
+          <a
+            href="https://github.com/deni-zain?tab=repositories"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-lift inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-slate-800/70 border border-slate-700 text-slate-200 hover:border-cyanNeon hover:text-cyanGlow font-semibold text-sm"
+          >
+            <i class="fa-brands fa-github text-base"></i> Lihat Semua di GitHub
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIDEOS SECTION -->
+    <section
+      id="videos"
+      class="py-20 px-4 lg:px-12 relative border-t border-slate-800/60 reveal"
+    >
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <h2 class="text-3xl sm:text-4xl font-bold text-white mb-3">
+            Video <span class="text-cyanNeon">YouTube</span>
+          </h2>
+          <p class="text-slate-400 text-sm">
+            Beberapa karya video terbaru dari channel YouTube saya.
+          </p>
+          <div
+            class="w-16 h-1 bg-gradient-to-r from-cyanNeon to-purpleAccent mx-auto rounded-full mt-3"
+          ></div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="glass-card rounded-xl border border-slate-800 overflow-hidden">
+            <div class="relative w-full aspect-video bg-slate-900">
+              <iframe
+                class="absolute inset-0 w-full h-full"
+                src="https://www.youtube-nocookie.com/embed/r5oHY71KO54"
+                title="UAS Rekayasa Sistem Informasi"
+                loading="lazy"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+              ></iframe>
+            </div>
+            <div class="p-4">
+              <h3 class="text-sm font-semibold text-white leading-snug">UAS Rekayasa Sistem Informasi</h3>
+            </div>
+          </div>
+          <div class="glass-card rounded-xl border border-slate-800 overflow-hidden">
+            <div class="relative w-full aspect-video bg-slate-900">
+              <iframe
+                class="absolute inset-0 w-full h-full"
+                src="https://www.youtube-nocookie.com/embed/iODyeAcQfNc"
+                title="UTS Rekayasa Sistem Informasi"
+                loading="lazy"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+              ></iframe>
+            </div>
+            <div class="p-4">
+              <h3 class="text-sm font-semibold text-white leading-snug">UTS Rekayasa Sistem Informasi</h3>
+            </div>
+          </div>
+          <div class="glass-card rounded-xl border border-slate-800 overflow-hidden">
+            <div class="relative w-full aspect-video bg-slate-900">
+              <iframe
+                class="absolute inset-0 w-full h-full"
+                src="https://www.youtube-nocookie.com/embed/dPRjdyAGF4A"
+                title="Membuat Aplikasi Geo Quiz untuk Soal IPA dengan Android Studio (Kotlin)"
+                loading="lazy"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+              ></iframe>
+            </div>
+            <div class="p-4">
+              <h3 class="text-sm font-semibold text-white leading-snug">Membuat Aplikasi Geo Quiz untuk Soal IPA dengan Android Studio (Kotlin)</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center mt-10">
+          <a
+            href="https://www.youtube.com/@deniandrian883"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-red-500/10 border border-red-500/40 text-red-400 hover:bg-red-500 hover:text-white font-semibold text-sm transition-all"
+          >
+            <i class="fa-brands fa-youtube"></i> Lihat Semua Video
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section
+      id="contact"
+      class="py-20 px-4 lg:px-12 relative border-t border-slate-800/60 reveal"
+    >
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <h2 class="text-3xl sm:text-4xl font-bold text-white mb-3">
+            Hubungi <span class="text-purpleAccent">Saya</span>
+          </h2>
+          <p class="text-slate-400 text-sm">
+            Tertarik bekerjasama atau punya pertanyaan? Mari terhubung!
+          </p>
+          <div
+            class="w-16 h-1 bg-gradient-to-r from-purpleAccent to-cyanNeon mx-auto rounded-full mt-3"
+          ></div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <!-- Left Direct Info Cards -->
+          <div class="lg:col-span-5 space-y-4">
+            <a
+              href="mailto:deniandrian906@gmail.com"
+              class="glass-card p-5 rounded-xl border border-slate-800 flex items-center gap-4 group"
+            >
+              <div
+                class="p-3.5 rounded-lg bg-cyan-500/10 text-cyanNeon group-hover:scale-110 transition-transform"
+              >
+                <i class="fa-solid fa-envelope text-xl"></i>
+              </div>
+              <div>
+                <h4 class="text-xs font-mono text-slate-400">Email Utama</h4>
+                <p
+                  class="text-sm font-semibold text-white group-hover:text-cyanNeon transition-colors"
+                >
+                  deniandrian906@gmail.com
+                </p>
+              </div>
+            </a>
+
+            <a
+              href="https://wa.me/6285786495540"
+              target="_blank"
+              class="glass-card p-5 rounded-xl border border-slate-800 flex items-center gap-4 group"
+            >
+              <div
+                class="p-3.5 rounded-lg bg-emerald-500/10 text-emerald-400 group-hover:scale-110 transition-transform"
+              >
+                <i class="fa-brands fa-whatsapp text-xl"></i>
+              </div>
+              <div>
+                <h4 class="text-xs font-mono text-slate-400">
+                  WhatsApp / Telepon
+                </h4>
+                <p
+                  class="text-sm font-semibold text-white group-hover:text-emerald-400 transition-colors"
+                >
+                  +62 857-8649-5540
+                </p>
+              </div>
+            </a>
+
+            <a
+              href="https://www.youtube.com/@deniandrian883"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="glass-card p-5 rounded-xl border border-slate-800 flex items-center gap-4 group"
+            >
+              <div
+                class="p-3.5 rounded-lg bg-red-500/10 text-red-500 group-hover:scale-110 transition-transform"
+              >
+                <i class="fa-brands fa-youtube text-xl"></i>
+              </div>
+              <div>
+                <h4 class="text-xs font-mono text-slate-400">YouTube</h4>
+                <p
+                  class="text-sm font-semibold text-white group-hover:text-red-500 transition-colors"
+                >
+                  @deniandrian883
+                </p>
+              </div>
+            </a>
+
+            <div
+              class="glass-card p-5 rounded-xl border border-slate-800 flex items-center gap-4"
+            >
+              <div class="p-3.5 rounded-lg bg-purple-500/10 text-purpleAccent">
+                <i class="fa-solid fa-location-dot text-xl"></i>
+              </div>
+              <div>
+                <h4 class="text-xs font-mono text-slate-400">Domisili</h4>
+                <p class="text-sm font-semibold text-white">
+                  Larangan, Kab. Brebes, Jawa Tengah
+                </p>
+              </div>
+            </div>
+
+            <!-- Kartu media sosial -->
+            <div
+              class="glass-card p-5 rounded-xl border border-slate-800"
+            >
+              <div class="flex items-center gap-2 mb-3">
+                <div class="p-2 rounded-lg bg-cyan-500/10 text-cyanNeon">
+                  <i class="fa-solid fa-share-nodes text-sm"></i>
+                </div>
+                <h4
+                  class="text-xs font-mono text-slate-400 uppercase tracking-[0.14em]"
+                >
+                  Media Sosial
+                </h4>
+              </div>
+              <div class="social-row">
+                <a
+                  href="https://github.com/deni-zain"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="social-btn social-btn--gh"
+                  data-tip="GitHub · deni-zain"
+                  aria-label="GitHub Deni Andrian (deni-zain)"
+                  title="GitHub · deni-zain"
+                >
+                  <svg class="social-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ico-github"></use></svg>
+                </a>
+                <a
+                  href="https://web.facebook.com/deni.zain.90/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="social-btn social-btn--fb"
+                  data-tip="Facebook · deni.zain.90"
+                  aria-label="Facebook Deni Andrian"
+                  title="Facebook · deni.zain.90"
+                >
+                  <svg class="social-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ico-facebook"></use></svg>
+                </a>
+                <a
+                  href="https://www.instagram.com/deni_andrian_id/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="social-btn social-btn--ig"
+                  data-tip="Instagram · @deni_andrian_id"
+                  aria-label="Instagram Deni Andrian (@deni_andrian_id)"
+                  title="Instagram · @deni_andrian_id"
+                >
+                  <svg class="social-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ico-instagram"></use></svg>
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/deni-andrian-57230942a/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="social-btn social-btn--li"
+                  data-tip="LinkedIn · deni-andrian"
+                  aria-label="LinkedIn Deni Andrian"
+                  title="LinkedIn · deni-andrian"
+                >
+                  <svg class="social-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ico-linkedin"></use></svg>
+                </a>
+              </div>
+              <p class="text-[11px] font-mono text-slate-500 mt-3 leading-relaxed">
+                Klik ikon untuk membuka profil di tab baru.
+              </p>
+            </div>
+          </div>
+
+          <!-- Right Form Input -->
+          <div
+            class="lg:col-span-7 glass-panel p-6 sm:p-8 rounded-2xl border border-slate-800"
+          >
+            <form
+              id="contactForm"
+              onsubmit="handleFormSubmit(event)"
+              class="space-y-4"
+            >
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-mono text-slate-400 mb-1"
+                    >Nama Lengkap</label
+                  >
+                  <input
+                    type="text"
+                    id="senderName"
+                    required
+                    placeholder="John Doe"
+                    class="w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-200 text-sm focus:outline-none focus:border-cyanNeon transition-colors"
+                  />
+                </div>
+                <div>
+                  <label class="block text-xs font-mono text-slate-400 mb-1"
+                    >Email / Kontak</label
+                  >
+                  <input
+                    type="text"
+                    id="senderContact"
+                    required
+                    placeholder="email@domain.com"
+                    class="w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-200 text-sm focus:outline-none focus:border-cyanNeon transition-colors"
+                  />
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-mono text-slate-400 mb-1"
+                  >Subjek</label
+                >
+                <input
+                  type="text"
+                  id="msgSubject"
+                  required
+                  placeholder="Tawaran Pekerjaan / Project"
+                  class="w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-200 text-sm focus:outline-none focus:border-cyanNeon transition-colors"
+                />
+              </div>
+              <div>
+                <label class="block text-xs font-mono text-slate-400 mb-1"
+                  >Pesan / Detail Project</label
+                >
+                <textarea
+                  id="msgContent"
+                  rows="4"
+                  required
+                  placeholder="Halo Deni, saya tertarik untuk..."
+                  class="w-full px-4 py-2.5 rounded-lg bg-slate-900 border border-slate-700 text-slate-200 text-sm focus:outline-none focus:border-cyanNeon transition-colors resize-none"
+                ></textarea>
+              </div>
+
+              <button
+                type="submit"
+                class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 text-slate-950 font-bold hover:brightness-110 transition-all flex items-center justify-center gap-2"
+              >
+                <i class="fa-solid fa-paper-plane"></i> Kirim Pesan
+              </button>
+            </form>
+
+            <!-- Alert Box Container -->
+            <div
+              id="formAlert"
+              class="hidden mt-4 p-4 rounded-xl text-xs font-mono text-center"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer
+      class="py-8 border-t border-slate-800 text-center text-xs text-slate-500 font-mono"
+    >
+      <div class="max-w-6xl mx-auto px-4 flex flex-col items-center gap-5">
+        <a
+          href="#home"
+          class="brand-lockup flex items-center gap-1.5 text-white text-sm"
+          aria-label="myportofolio Dennydev - kembali ke atas"
+        >
+          <span class="text-cyanNeon font-mono brand-bracket leading-none">&lt;</span>
+          <span class="brand-text">myportofolio <span class="brand-accent">Dennydev</span></span>
+          <span class="text-purpleAccent font-mono brand-bracket leading-none">/&gt;</span>
+        </a>
+
+        <div class="social-row justify-center">
+          <a
+            href="https://github.com/deni-zain"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-btn social-btn--gh"
+            data-tip="GitHub · deni-zain"
+            aria-label="GitHub Deni Andrian (deni-zain)"
+            title="GitHub · deni-zain"
+          >
+            <svg class="social-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ico-github"></use></svg>
+          </a>
+          <a
+            href="https://web.facebook.com/deni.zain.90/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-btn social-btn--fb"
+            data-tip="Facebook · deni.zain.90"
+            aria-label="Facebook Deni Andrian"
+            title="Facebook · deni.zain.90"
+          >
+            <svg class="social-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ico-facebook"></use></svg>
+          </a>
+          <a
+            href="https://www.instagram.com/deni_andrian_id/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-btn social-btn--ig"
+            data-tip="Instagram · @deni_andrian_id"
+            aria-label="Instagram Deni Andrian (@deni_andrian_id)"
+            title="Instagram · @deni_andrian_id"
+          >
+            <svg class="social-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ico-instagram"></use></svg>
+          </a>
+          <a
+            href="https://www.linkedin.com/in/deni-andrian-57230942a/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="social-btn social-btn--li"
+            data-tip="LinkedIn · deni-andrian"
+            aria-label="LinkedIn Deni Andrian"
+            title="LinkedIn · deni-andrian"
+          >
+            <svg class="social-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><use href="#ico-linkedin"></use></svg>
+          </a>
+        </div>
+
+        <div
+          class="w-full pt-4 border-t border-slate-800/70 flex flex-col sm:flex-row items-center justify-between gap-2"
+        >
+          <p>&copy; 2026 Deni Andrian, S.Kom. All rights reserved.</p>
+          <p class="text-slate-600">Built with Tailwind CSS &amp; Vanilla JS</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT LOGIC -->
+    <script>
+      // 1. Mobile Menu Toggle Logic
+      const menuBtn = document.getElementById("menu-btn");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const menuIcon = document.getElementById("menu-icon");
+      const mobileLinks = document.querySelectorAll(".mobile-link");
+
+      menuBtn.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+        if (mobileMenu.classList.contains("hidden")) {
+          menuIcon.classList.remove("fa-xmark");
+          menuIcon.classList.add("fa-bars");
+        } else {
+          menuIcon.classList.remove("fa-bars");
+          menuIcon.classList.add("fa-xmark");
+        }
+      });
+
+      mobileLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+          mobileMenu.classList.add("hidden");
+          menuIcon.classList.remove("fa-xmark");
+          menuIcon.classList.add("fa-bars");
+        });
+      });
+
+      // 2. Efek typing pada hero, scroll reveal, progress bar, dan scrollspy
+      //    ditangani oleh assets/js/animations.js (satu controller, tanpa duplikasi).
+
+      // 4. Interactive Contact Form Handler (Simulated Message Sending)
+      function handleFormSubmit(event) {
+        event.preventDefault();
+
+        const name = document.getElementById("senderName").value;
+        const contact = document.getElementById("senderContact").value;
+        const subject = document.getElementById("msgSubject").value;
+        const content = document.getElementById("msgContent").value;
+        const alertBox = document.getElementById("formAlert");
+
+        // Format message for WhatsApp Fallback Option
+        const waMessage = `Halo Deni, Saya ${name} (${contact}).%0A%0A*Subjek:* ${subject}%0A*Pesan:* ${content}`;
+
+        // Show success status box
+        alertBox.classList.remove(
+          "hidden",
+          "bg-red-500/20",
+          "border-red-500/40",
+          "text-red-300",
+        );
+        alertBox.classList.add(
+          "bg-cyan-500/20",
+          "border",
+          "border-cyan-500/40",
+          "text-cyanGlow",
+        );
+        alertBox.innerHTML = `
+                <p class="font-bold mb-1"><i class="fa-solid fa-circle-check"></i> Pesan Siap Diteruskan!</p>
+                <p class="mb-2">Terima kasih ${name}, klik tombol di bawah untuk langsung mengirim via WhatsApp:</p>
+                <a href="https://wa.me/6285786495540?text=${waMessage}" target="_blank" class="inline-block px-4 py-2 rounded-lg bg-emerald-500 text-slate-950 font-bold hover:bg-emerald-400 transition-colors mt-1">
+                    <i class="fa-brands fa-whatsapp"></i> Lanjutkan Kirim ke WhatsApp
+                </a>
+            `;
+
+        // Reset Form Fields
+        document.getElementById("contactForm").reset();
+      }
+    </script>
+
+    <!-- Snapshot cadangan repositori (dipakai hanya bila API gagal) -->
+    <!-- Section Repositori GitHub: fetch, filter, sort, loading & error state -->
+    <!-- Animasi: scroll reveal, navbar, scrollspy, count-up, typing -->
+
+    <script>
+/* ===== inlined: repos-fallback.js ===== */
+/* Snapshot repositori publik @deni-zain.
+   Dipakai repos.js HANYA bila GitHub API gagal / rate-limited,
+   sehingga grid tetap terisi dan pengunjung tidak melihat halaman kosong.
+   Diperbarui otomatis setiap fetch sukses; boleh dibiarkan usang. */
+window.__REPOS_FALLBACK__ = [
+  {
+    "name": "myportofoliodeniandrianskom",
+    "html_url": "https://github.com/deni-zain/myportofoliodeniandrianskom",
+    "description": "ini portofolioku",
+    "language": "HTML",
+    "stargazers_count": 0,
+    "forks_count": 0,
+    "updated_at": "2026-10-21T15:40:29Z",
+    "fork": false,
+    "archived": false,
+    "size": 13
+  },
+  {
+    "name": "sistem-biling-broadband",
+    "html_url": "https://github.com/deni-zain/sistem-biling-broadband",
+    "description": "Sistem billing langganan internet untuk ISP — manajemen pelanggan, tagihan, dan pembayaran.",
+    "language": "PHP",
+    "stargazers_count": 0,
+    "forks_count": 0,
+    "updated_at": "2024-08-13T16:42:48Z",
+    "fork": false,
+    "archived": false,
+    "size": 0
+  },
+  {
+    "name": "data-analis",
+    "html_url": "https://github.com/deni-zain/data-analis",
+    "description": "Latihan pengolahan dan analisis data: pembersihan data, visualisasi, dan pelaporan hasil analisis.",
+    "language": "Python",
+    "stargazers_count": 0,
+    "forks_count": 0,
+    "updated_at": "2024-08-01T16:22:03Z",
+    "fork": false,
+    "archived": false,
+    "size": 4400
+  },
+  {
+    "name": "jaringansyaraftiruan",
+    "html_url": "https://github.com/deni-zain/jaringansyaraftiruan",
+    "description": "Eksperimen Jaringan Syaraf Tiruan (JST) — implementasi dan evaluasi model dengan Jupyter Notebook.",
+    "language": "Jupyter Notebook",
+    "stargazers_count": 0,
+    "forks_count": 0,
+    "updated_at": "2024-04-25T08:19:24Z",
+    "fork": false,
+    "archived": false,
+    "size": 1084
+  },
+  {
+    "name": "laravelduaputra",
+    "html_url": "https://github.com/deni-zain/laravelduaputra",
+    "description": "Aplikasi web berbasis Laravel untuk kebutuhan pengelolaan data dan transaksi.",
+    "language": "JavaScript",
+    "stargazers_count": 0,
+    "forks_count": 0,
+    "updated_at": "2023-06-22T14:28:27Z",
+    "fork": false,
+    "archived": false,
+    "size": 37206
+  },
+  {
+    "name": "sisteminformasigeografis",
+    "html_url": "https://github.com/deni-zain/sisteminformasigeografis",
+    "description": "Sistem Informasi Geografis (SIG) berbasis web untuk pemetaan dan pengelolaan data spasial.",
+    "language": "JavaScript",
+    "stargazers_count": 0,
+    "forks_count": 0,
+    "updated_at": "2023-06-22T14:25:38Z",
+    "fork": false,
+    "archived": false,
+    "size": 13779
+  }
+];
+
+    </script>
+    <script>
+/* ===== inlined: repos.js ===== */
+/* =========================================================
+   repos.js — Repositori GitHub Deni Andrian (deni-zain)
+   - Fetch GitHub REST API + pagination (per_page=100)
+   - Loading skeleton, empty state, error + rate-limit handling
+   - Filter bahasa, pencarian, dan sort (terbaru / nama / bintang)
+   - Fallback snapshot bila API tidak dapat diakses
+   ========================================================= */
+(function () {
+  "use strict";
+
+  var CFG = {
+    username: "deni-zain",
+    apiBase: "https://api.github.com",
+    perPage: 100,
+    maxPages: 5,
+    profileUrl: "https://github.com/deni-zain?tab=repositories",
+    cacheKey: "deni-zain:repos:v1",
+    cacheTTL: 30 * 60 * 1000 // 30 menit
+  };
+
+  /* Snapshot publik terakhir (dipakai hanya bila API gagal/rate-limited).
+     Diperbarui otomatis saat fetch berhasil; aman jika dibiarkan usang. */
+  var FALLBACK = window.__REPOS_FALLBACK__ || [];
+
+  var $ = function (sel, root) { return (root || document).querySelector(sel); };
+  var $$ = function (sel, root) {
+    return Array.prototype.slice.call((root || document).querySelectorAll(sel));
+  };
+
+  var els = {};
+  var state = {
+    all: [],
+    view: [],
+    lang: "all",
+    query: "",
+    sort: "updated",
+    source: "live",
+    loading: false
+  };
+
+  /* ---------------- Bahasa: warna + label rapi ---------------- */
+  var LANG_COLORS = {
+    JavaScript: "#f1e05a",
+    TypeScript: "#3178c6",
+    HTML: "#e34c26",
+    CSS: "#563d7c",
+    SCSS: "#c6538c",
+    PHP: "#4F5D95",
+    Python: "#3572A5",
+    "Jupyter Notebook": "#DA5B0B",
+    Java: "#b07219",
+    Kotlin: "#A97BFF",
+    Dart: "#00B4AB",
+    Go: "#00ADD8",
+    Rust: "#dea584",
+    C: "#555555",
+    "C++": "#f34b7d",
+    "C#": "#178600",
+    Ruby: "#701516",
+    Shell: "#89e051",
+    Vue: "#41b883",
+    Svelte: "#ff3e00",
+    Swift: "#F05138",
+    Lua: "#000080",
+    PowerShell: "#012456",
+    Dockerfile: "#384d54",
+    "Blade": "#f7523f",
+    EJS: "#a91e50",
+    Hack: "#878787",
+    Makefile: "#427819",
+    Nix: "#7e7eff"
+  };
+
+  function langColor(lang) {
+    if (!lang) return "#8b949e";
+    return LANG_COLORS[lang] || "#94a3b8";
+  }
+
+  function iconFor(lang) {
+    var map = {
+      JavaScript: "fa-brands fa-js",
+      TypeScript: "fa-brands fa-js",
+      HTML: "fa-brands fa-html5",
+      CSS: "fa-brands fa-css3-alt",
+      SCSS: "fa-brands fa-sass",
+      PHP: "fa-brands fa-php",
+      Python: "fa-brands fa-python",
+      "Jupyter Notebook": "fa-solid fa-book-open",
+      Java: "fa-brands fa-java",
+      Kotlin: "fa-solid fa-mobile-screen",
+      Dart: "fa-solid fa-feather",
+      Vue: "fa-brands fa-vuejs",
+      Svelte: "fa-solid fa-fire",
+      React: "fa-brands fa-react",
+      "Node.js": "fa-brands fa-node-js",
+      Dockerfile: "fa-brands fa-docker",
+      Shell: "fa-solid fa-terminal",
+      Lua: "fa-solid fa-moon"
+    };
+    return map[lang] || "fa-solid fa-code-branch";
+  }
+
+  /* ---------------- Util ---------------- */
+  function escapeHtml(str) {
+    return String(str == null ? "" : str).replace(/[&<>"']/g, function (c) {
+      return {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[c];
+    });
+  }
+
+  function fmtNumber(n) {
+    var v = Number(n) || 0;
+    if (v >= 1000) return (v / 1000).toFixed(v % 1000 === 0 ? 0 : 1) + "k";
+    return String(v);
+  }
+
+  var MONTHS = [
+    "Jan", "Feb", "Mar", "Apr", "Mei", "Jun",
+    "Jul", "Agu", "Sep", "Okt", "Nov", "Des"
+  ];
+
+  function fmtDate(iso) {
+    if (!iso) return "—";
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return "—";
+    return d.getDate() + " " + MONTHS[d.getMonth()] + " " + d.getFullYear();
+  }
+
+  function relTime(iso) {
+    if (!iso) return "";
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return "";
+    var diff = Date.now() - d.getTime();
+    var day = 86400000;
+    var days = Math.floor(diff / day);
+    if (days < 1) return "hari ini";
+    if (days < 30) return days + " hari lalu";
+    var months = Math.floor(days / 30);
+    if (months < 12) return months + " bln lalu";
+    var years = Math.floor(days / 365);
+    return years + " thn lalu";
+  }
+
+  /* ---------------- Cache lokal (hemat kuota API) ---------------- */
+  function readCache() {
+    try {
+      var raw = localStorage.getItem(CFG.cacheKey);
+      if (!raw) return null;
+      var parsed = JSON.parse(raw);
+      if (!parsed || !Array.isArray(parsed.items) || !parsed.at) return null;
+      if (Date.now() - parsed.at > CFG.cacheTTL) return null;
+      return parsed.items;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function writeCache(items) {
+    try {
+      localStorage.setItem(
+        CFG.cacheKey,
+        JSON.stringify({ at: Date.now(), items: items })
+      );
+    } catch (e) {
+      /* kuota penuh / mode privat — abaikan */
+    }
+  }
+
+  /* ---------------- Normalisasi objek repo ---------------- */
+  function normalize(r) {
+    return {
+      name: r.name || "tanpa-nama",
+      url: r.html_url || CFG.profileUrl,
+      description: (r.description || "").trim(),
+      language: r.language || null,
+      stars: Number(r.stargazers_count) || 0,
+      forks: Number(r.forks_count) || 0,
+      updated: r.updated_at || null,
+      fork: !!r.fork,
+      archived: !!r.archived,
+      size: Number(r.size) || 0
+    };
+  }
+
+  /* ---------------- Fetch berlapis, dengan pagination ---------------- */
+  function fetchPage(page, signal) {
+    var url =
+      CFG.apiBase +
+      "/users/" +
+      encodeURIComponent(CFG.username) +
+      "/repos?per_page=" +
+      CFG.perPage +
+      "&sort=updated&page=" +
+      page;
+
+    return fetch(url, {
+      method: "GET",
+      headers: { Accept: "application/vnd.github+json" },
+      signal: signal,
+      cache: "no-store"
+    }).then(function (res) {
+      if (res.status === 403 || res.status === 429) {
+        var err = new Error("rate-limited");
+        err.kind = "rate-limited";
+        err.reset = res.headers.get("X-RateLimit-Reset");
+        throw err;
+      }
+      if (res.status === 404) {
+        var nf = new Error("not-found");
+        nf.kind = "not-found";
+        throw nf;
+      }
+      if (!res.ok) {
+        var e2 = new Error("http-" + res.status);
+        e2.kind = "http";
+        e2.status = res.status;
+        throw e2;
+      }
+      return res.json();
+    });
+  }
+
+  function fetchAll(signal) {
+    var pages = [];
+    var collected = [];
+
+    function next(page) {
+      return fetchPage(page, signal).then(function (batch) {
+        if (!Array.isArray(batch)) {
+          var e = new Error("bad-payload");
+          e.kind = "parse";
+          throw e;
+        }
+        collected = collected.concat(batch);
+        // Halaman penuh → masih ada halaman berikutnya.
+        if (batch.length === CFG.perPage && page < CFG.maxPages) {
+          return next(page + 1);
+        }
+        return collected;
+      });
+    }
+
+    return next(1).then(function (items) {
+      var seen = Object.create(null);
+      return items.filter(function (it) {
+        if (!it || !it.name || seen[it.id || it.name]) return false;
+        seen[it.id || it.name] = true;
+        return true;
+      });
+    });
+  }
+
+  /* ---------------- Render: skeleton ---------------- */
+  function renderSkeleton(n) {
+    var box = els.grid;
+    if (!box) return;
+    var html = "";
+    for (var i = 0; i < (n || 6); i++) {
+      html +=
+        '<div class="repo-card repo-skel" aria-hidden="true">' +
+        '<div class="repo-card-top">' +
+        '<div class="skeleton" style="width:2.1rem;height:2.1rem;border-radius:.55rem"></div>' +
+        '<div class="skeleton sk-title" style="flex:1"></div>' +
+        "</div>" +
+        '<div class="skeleton sk-line-1"></div>' +
+        '<div class="skeleton sk-line-2"></div>' +
+        '<div class="skeleton sk-foot"></div>' +
+        "</div>";
+    }
+    box.innerHTML = html;
+    box.setAttribute("aria-busy", "true");
+  }
+
+  /* ---------------- Render: kartu ---------------- */
+  function cardHtml(r, index) {
+    var desc = r.description
+      ? escapeHtml(r.description)
+      : '<span class="text-slate-500 italic">Tanpa deskripsi — buka repo untuk detail.</span>';
+
+    var badges = "";
+    if (r.fork) badges += '<span class="repo-badge">fork</span>';
+    if (r.archived) badges += '<span class="repo-badge">arsip</span>';
+
+    return (
+      '<a class="repo-card" href="' +
+      escapeHtml(r.url) +
+      '" target="_blank" rel="noopener noreferrer"' +
+      ' aria-label="Buka repositori ' + escapeHtml(r.name) + ' di GitHub"' +
+      ' style="transition-delay:' + Math.min(index * 45, 360) + 'ms">' +
+        '<div class="repo-card-top">' +
+          '<span class="repo-icon"><i class="' + iconFor(r.language) + '"></i></span>' +
+          '<h3 class="repo-title">' + escapeHtml(r.name) + "</h3>" +
+          '<i class="fa-solid fa-arrow-up-right-from-square repo-arrow"></i>' +
+        "</div>" +
+        '<p class="repo-desc">' + desc + "</p>" +
+        '<div class="repo-meta">' +
+          '<span class="repo-lang">' +
+            '<span class="dot" style="background:' + langColor(r.language) + ';color:' + langColor(r.language) + '"></span>' +
+            escapeHtml(r.language || "Lainnya") +
+          "</span>" +
+          '<span class="repo-stat" title="Bintang"><i class="fa-solid fa-star"></i>' + fmtNumber(r.stars) + "</span>" +
+          '<span class="repo-stat" title="Fork"><i class="fa-solid fa-code-fork"></i>' + fmtNumber(r.forks) + "</span>" +
+        "</div>" +
+        '<div class="repo-foot">' +
+          '<i class="fa-regular fa-clock"></i>' +
+          "<span>Diperbarui " + fmtDate(r.updated) +
+          (relTime(r.updated) ? " · " + relTime(r.updated) : "") + "</span>" +
+          (badges ? " " + badges : "") +
+        "</div>" +
+      "</a>"
+    );
+  }
+
+  function renderPanel(kind, title, message, withRetry) {
+    var box = els.grid;
+    if (!box) return;
+    var icon =
+      kind === "error" ? "fa-solid fa-triangle-exclamation" : "fa-regular fa-folder-open";
+    box.innerHTML =
+      '<div class="repo-panel ' + (kind === "error" ? "repo-panel--error" : "repo-panel--empty") + '" style="grid-column:1/-1">' +
+        "<i class=\"" + icon + "\"></i>" +
+        "<h3>" + escapeHtml(title) + "</h3>" +
+        "<p>" + escapeHtml(message) + "</p>" +
+        (withRetry ? '<button type="button" class="repo-retry" data-retry><i class="fa-solid fa-rotate-right"></i> Coba lagi</button>' : "") +
+      "</div>";
+    box.removeAttribute("aria-busy");
+
+    if (withRetry && els.grid) {
+      var btn = $("[data-retry]", box);
+      if (btn) btn.addEventListener("click", function () { load(true); });
+    }
+  }
+
+  /* ---------------- Notice bar (rate limit / fallback) ---------------- */
+  function showNotice(html) {
+    if (!els.notice) return;
+    if (!html) {
+      els.notice.innerHTML = "";
+      els.notice.classList.add("is-hidden");
+      return;
+    }
+    els.notice.innerHTML = html;
+    els.notice.classList.remove("is-hidden");
+    var btn = $("[data-retry-notice]", els.notice);
+    if (btn) btn.addEventListener("click", function () { load(true); });
+  }
+
+  function rateLimitMessage(err) {
+    var reset = err && err.reset ? Number(err.reset) : 0;
+    var when = "";
+    if (reset) {
+      var mins = Math.max(0, Math.ceil((reset * 1000 - Date.now()) / 60000));
+      when = mins > 0 ? " Coba lagi sekitar " + mins + " menit lagi." : "";
+    }
+    return (
+      "Kuota GitHub API publik sedang habis (rate limit 60 permintaan/jam)." +
+      when +
+      " Data di bawah berasal dari snapshot terakhir yang tersimpan."
+    );
+  }
+
+  /* ---------------- Filter chip bahasa ---------------- */
+  function buildFilters() {
+    if (!els.filters) return;
+    var counts = Object.create(null);
+    state.all.forEach(function (r) {
+      var k = r.language || "Lainnya";
+      counts[k] = (counts[k] || 0) + 1;
+    });
+
+    var langs = Object.keys(counts).sort(function (a, b) {
+      if (a === "Lainnya") return 1;
+      if (b === "Lainnya") return -1;
+      if (counts[b] !== counts[a]) return counts[b] - counts[a];
+      return a.localeCompare(b);
+    });
+
+    var html =
+      '<button type="button" class="filter-chip' +
+      (state.lang === "all" ? " is-active" : "") +
+      '" data-lang="all" aria-pressed="' + (state.lang === "all") + '">' +
+      "Semua <span class=\"chip-count\">" + state.all.length + "</span></button>";
+
+    langs.forEach(function (l) {
+      html +=
+        '<button type="button" class="filter-chip' +
+        (state.lang === l ? " is-active" : "") +
+        '" data-lang="' + escapeHtml(l) + '" aria-pressed="' + (state.lang === l) + '">' +
+        '<span class="chip-dot" style="background:' + langColor(l === "Lainnya" ? null : l) + '"></span>' +
+        escapeHtml(l) +
+        ' <span class="chip-count">' + counts[l] + "</span>" +
+        "</button>";
+    });
+
+    els.filters.innerHTML = html;
+
+    $$(".filter-chip", els.filters).forEach(function (chip) {
+      chip.addEventListener("click", function () {
+        state.lang = chip.getAttribute("data-lang") || "all";
+        buildFilters();
+        applyView();
+      });
+    });
+  }
+
+  /* ---------------- Stats ringkas ---------------- */
+  function renderStats() {
+    var total = state.all.length;
+    var stars = state.all.reduce(function (a, r) { return a + r.stars; }, 0);
+    var forks = state.all.reduce(function (a, r) { return a + r.forks; }, 0);
+    var langs = Object.create(null);
+    state.all.forEach(function (r) { if (r.language) langs[r.language] = 1; });
+
+    var vals = {
+      total: total,
+      stars: stars,
+      forks: forks,
+      langs: Object.keys(langs).length
+    };
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function setNum(el, value) {
+      if (!el) return;
+      el.setAttribute("data-count-to", String(value));
+      if (reduce) {
+        el.textContent = fmtNumber(value);
+        return;
+      }
+      var from = parseInt(el.textContent, 10);
+      if (isNaN(from)) from = 0;
+      if (from === value) { el.textContent = fmtNumber(value); return; }
+
+      var t0 = null;
+      var dur = 800;
+      function step(ts) {
+        if (t0 === null) t0 = ts;
+        var p = Math.min(1, (ts - t0) / dur);
+        var eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = fmtNumber(Math.round(from + (value - from) * eased));
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = fmtNumber(value);
+      }
+      requestAnimationFrame(step);
+    }
+
+    setNum(els.statTotal, vals.total);
+    setNum(els.statStars, vals.stars);
+    setNum(els.statForks, vals.forks);
+    setNum(els.statLangs, vals.langs);
+  }
+
+  /* ---------------- Terapkan filter + sort ---------------- */
+  function applyView() {
+    var q = state.query.trim().toLowerCase();
+
+    var list = state.all.filter(function (r) {
+      if (state.lang !== "all") {
+        var key = r.language || "Lainnya";
+        if (key !== state.lang) return false;
+      }
+      if (!q) return true;
+      return (
+        r.name.toLowerCase().indexOf(q) !== -1 ||
+        (r.description || "").toLowerCase().indexOf(q) !== -1 ||
+        (r.language || "").toLowerCase().indexOf(q) !== -1
+      );
+    });
+
+    var sorters = {
+      updated: function (a, b) {
+        return new Date(b.updated || 0) - new Date(a.updated || 0);
+      },
+      name: function (a, b) {
+        return a.name.localeCompare(b.name, "id", { sensitivity: "base" });
+      },
+      stars: function (a, b) {
+        return b.stars - a.stars || new Date(b.updated || 0) - new Date(a.updated || 0);
+      },
+      oldest: function (a, b) {
+        return new Date(a.updated || 0) - new Date(b.updated || 0);
+      }
+    };
+
+    list.sort(sorters[state.sort] || sorters.updated);
+    state.view = list;
+
+    if (els.count) {
+      els.count.textContent =
+        list.length + " dari " + state.all.length + " repositori";
+    }
+
+    if (!els.grid) return;
+
+    if (!list.length) {
+      renderPanel(
+        "empty",
+        "Tidak ada repositori yang cocok",
+        "Coba ubah kata kunci pencarian atau pilih filter bahasa \"Semua\".",
+        false
+      );
+      return;
+    }
+
+    els.grid.innerHTML = list.map(cardHtml).join("");
+    els.grid.removeAttribute("aria-busy");
+
+    // Animasi masuk berurutan (stagger), hormati reduced-motion.
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var cards = $$(".repo-card", els.grid);
+    if (reduce || !("IntersectionObserver" in window)) {
+      cards.forEach(function (c) { c.classList.add("is-in"); });
+    } else {
+      requestAnimationFrame(function () {
+        cards.forEach(function (c) { c.classList.add("is-in"); });
+      });
+    }
+
+    // Glow lembut mengikuti kursor.
+    if (!reduce) {
+      cards.forEach(function (card) {
+        card.addEventListener("pointermove", function (ev) {
+          var rect = card.getBoundingClientRect();
+          card.style.setProperty("--mx", ((ev.clientX - rect.left) / rect.width) * 100 + "%");
+          card.style.setProperty("--my", ((ev.clientY - rect.top) / rect.height) * 100 + "%");
+        });
+      });
+    }
+  }
+
+  /* ---------------- Muat data ---------------- */
+  function load(force) {
+    if (state.loading) return;
+
+    var cached = force ? null : readCache();
+    if (cached && cached.length) {
+      state.all = cached.map(normalize);
+      state.source = "cache";
+      renderSkeleton(Math.min(state.all.length || 3, 6));
+      buildFilters();
+      renderStats();
+      applyView();
+      return;
+    }
+
+    state.loading = true;
+    showNotice("");
+    renderSkeleton(6);
+
+    var ctrl = typeof AbortController !== "undefined" ? new AbortController() : null;
+    var timer = setTimeout(function () {
+      if (ctrl) ctrl.abort();
+    }, 12000);
+
+    fetchAll(ctrl ? ctrl.signal : undefined)
+      .then(function (items) {
+        clearTimeout(timer);
+        state.loading = false;
+
+        if (!items.length) {
+          state.all = [];
+          renderStats();
+          if (els.filters) els.filters.innerHTML = "";
+          renderPanel(
+            "empty",
+            "Belum ada repositori publik",
+            "Akun GitHub @" + CFG.username + " belum memiliki repositori publik."
+          );
+          return;
+        }
+
+        state.all = items.map(normalize);
+        state.source = "live";
+        writeCache(state.all);
+        buildFilters();
+        renderStats();
+        applyView();
+      })
+      .catch(function (err) {
+        clearTimeout(timer);
+        state.loading = false;
+        var kind = (err && err.kind) || (err && err.name === "AbortError" ? "timeout" : "network");
+
+        // Fallback ke snapshot tertanam bila tersedia.
+        if (FALLBACK && FALLBACK.length) {
+          state.all = FALLBACK.map(normalize);
+          state.source = "fallback";
+          buildFilters();
+          renderStats();
+          applyView();
+
+          var msg =
+            kind === "rate-limited"
+              ? rateLimitMessage(err)
+              : kind === "timeout"
+              ? "Permintaan ke GitHub API melebihi batas waktu. Data di bawah adalah snapshot terakhir."
+              : "Tidak dapat menghubungi GitHub API saat ini (jaringan/CORS). Data di bawah adalah snapshot terakhir.";
+
+          showNotice(
+            '<i class="fa-solid fa-circle-info"></i><span>' + escapeHtml(msg) +
+            '</span><button type="button" data-retry-notice><i class="fa-solid fa-rotate-right"></i> Muat ulang</button>'
+          );
+          return;
+        }
+
+        // Tanpa fallback → tampilkan error state dengan tombol retry.
+        var title = "Gagal memuat repositori";
+        var body =
+          "Tidak dapat mengambil data dari GitHub API. Periksa koneksi Anda lalu coba lagi.";
+        if (kind === "rate-limited") {
+          body = rateLimitMessage(err);
+        } else if (kind === "not-found") {
+          title = "Akun GitHub tidak ditemukan";
+          body = "Pengguna @" + CFG.username + " tidak ditemukan atau tidak dapat diakses.";
+        } else if (kind === "timeout") {
+          body = "Permintaan melebihi batas waktu (12 detik). Jaringan mungkin lambat.";
+        }
+        renderPanel("error", title, body, true);
+      });
+  }
+
+  /* ---------------- Inisialisasi ---------------- */
+  function init() {
+    els.grid = $("#repo-grid");
+    if (!els.grid) return; // section tidak ada di halaman ini
+
+    els.filters = $("#repo-filters");
+    els.count = $("#repo-count");
+    els.notice = $("#repo-notice");
+    els.search = $("#repo-search");
+    els.sort = $("#repo-sort");
+    els.statTotal = $("#stat-total");
+    els.statStars = $("#stat-stars");
+    els.statForks = $("#stat-forks");
+    els.statLangs = $("#stat-langs");
+
+    var t = null;
+    if (els.search) {
+      els.search.addEventListener("input", function () {
+        clearTimeout(t);
+        var val = els.search.value;
+        t = setTimeout(function () {
+          state.query = val;
+          applyView();
+        }, 180);
+      });
+    }
+
+    if (els.sort) {
+      els.sort.addEventListener("change", function () {
+        state.sort = els.sort.value || "updated";
+        applyView();
+      });
+    }
+
+    load(false);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+
+    </script>
+    <script>
+/* ===== inlined: animations.js ===== */
+/* =========================================================
+   animations.js — motion controller
+   - Scroll reveal (IntersectionObserver + stagger)
+   - Progress bar & navbar compact
+   - Scrollspy menu aktif
+   - Angka statistik berjalan (count-up)
+   - Typing effect hero (versi tahan-error)
+   Ringan & sadar prefers-reduced-motion.
+   ========================================================= */
+(function () {
+  "use strict";
+
+  var reduceMotion =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) {
+    return Array.prototype.slice.call((r || document).querySelectorAll(s));
+  };
+
+  /* ---------------- 1. Scroll reveal ---------------- */
+  function initReveal() {
+    var targets = $$(
+      ".reveal, .reveal-left, .reveal-right, .reveal-zoom"
+    );
+    if (!targets.length) return;
+
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      targets.forEach(function (el) { el.classList.add("active"); });
+      return;
+    }
+
+    var io = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            var el = entry.target;
+            var delay = el.getAttribute("data-reveal-delay");
+            if (delay) el.style.transitionDelay = delay + "ms";
+            el.classList.add("active");
+            io.unobserve(el);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+    );
+
+    targets.forEach(function (el) { io.observe(el); });
+
+    // Elemen yang sudah terlihat saat load (di atas fold) langsung tampil.
+    requestAnimationFrame(function () {
+      targets.forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight * 0.92) el.classList.add("active");
+      });
+    });
+  }
+
+  /* ---------------- 2. Progress bar + navbar compact ---------------- */
+  function initScrollChrome() {
+    var bar = $("#scroll-progress");
+    var nav = $("#navbar");
+    var ticking = false;
+
+    function update() {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      var height =
+        document.documentElement.scrollHeight - window.innerHeight;
+
+      if (bar) {
+        var pct = height > 0 ? (scrollTop / height) * 100 : 0;
+        bar.style.width = Math.min(100, Math.max(0, pct)) + "%";
+      }
+      if (nav) {
+        if (scrollTop > 40) nav.classList.add("nav-scrolled");
+        else nav.classList.remove("nav-scrolled");
+      }
+      ticking = false;
+    }
+
+    window.addEventListener(
+      "scroll",
+      function () {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      },
+      { passive: true }
+    );
+    update();
+  }
+
+  /* ---------------- 3. Scrollspy ---------------- */
+  function initScrollSpy() {
+    var links = $$(".nav-link");
+    if (!links.length || !("IntersectionObserver" in window)) return;
+
+    var sections = links
+      .map(function (a) {
+        var id = (a.getAttribute("href") || "").replace("#", "");
+        var el = id ? document.getElementById(id) : null;
+        return el ? { id: id, el: el, link: a } : null;
+      })
+      .filter(Boolean);
+
+    if (!sections.length) return;
+
+    var io = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          var current = sections.filter(function (s) {
+            return s.el === entry.target;
+          })[0];
+          if (!current) return;
+          links.forEach(function (a) { a.classList.remove("is-current"); });
+          current.link.classList.add("is-current");
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px", threshold: 0 }
+    );
+
+    sections.forEach(function (s) { io.observe(s.el); });
+  }
+
+  /* ---------------- 4. Count-up angka ringkasan ---------------- */
+  function initCounters() {
+    var nodes = $$("[data-count-to]");
+    if (!nodes.length) return;
+
+    function run(el) {
+      var target = parseFloat(el.getAttribute("data-count-to")) || 0;
+      if (reduceMotion) {
+        el.textContent = String(target);
+        return;
+      }
+      var dur = 900;
+      var start = null;
+
+      function step(ts) {
+        if (start === null) start = ts;
+        var p = Math.min(1, (ts - start) / dur);
+        var eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = String(Math.round(target * eased));
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = String(target);
+      }
+      requestAnimationFrame(step);
+    }
+
+    if (!("IntersectionObserver" in window)) {
+      nodes.forEach(run);
+      return;
+    }
+
+    var io = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            run(entry.target);
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    nodes.forEach(function (n) { io.observe(n); });
+  }
+
+  /* ---------------- 5. Typing effect hero ---------------- */
+  function initTyping() {
+    var el = $("#typing-text");
+    if (!el) return;
+
+    var roles = [
+      "Full Stack Developer",
+      "Network Engineer",
+      "NOC Specialist",
+      "Linux Server Administrator"
+    ];
+
+    if (reduceMotion) {
+      el.textContent = roles[0];
+      return;
+    }
+
+    var roleIdx = 0;
+    var charIdx = 0;
+    var deleting = false;
+    var timer = null;
+
+    // Hentikan animasi saat tab tidak aktif (hemat CPU/baterai).
+    function schedule(ms) {
+      timer = setTimeout(tick, ms);
+    }
+
+    function tick() {
+      if (document.hidden) {
+        schedule(600);
+        return;
+      }
+      var current = roles[roleIdx];
+
+      if (deleting) {
+        charIdx--;
+        el.textContent = current.substring(0, charIdx);
+      } else {
+        charIdx++;
+        el.textContent = current.substring(0, charIdx);
+      }
+
+      var speed = deleting ? 38 : 78;
+
+      if (!deleting && charIdx === current.length) {
+        speed = 1900;
+        deleting = true;
+      } else if (deleting && charIdx === 0) {
+        deleting = false;
+        roleIdx = (roleIdx + 1) % roles.length;
+        speed = 420;
+      }
+      schedule(speed);
+    }
+
+    // Hindari dua instance (mis. bila skrip dimuat ulang di iframe).
+    if (window.__typingStarted) return;
+    window.__typingStarted = true;
+    schedule(700);
+
+    document.addEventListener("visibilitychange", function () {
+      if (!document.hidden && timer === null) tick();
+    });
+  }
+
+  /* ---------------- 6. Smooth anchor scroll (offset navbar) ---------------- */
+  function initSmoothAnchors() {
+    $$('a[href^="#"]').forEach(function (a) {
+      a.addEventListener("click", function (ev) {
+        var href = a.getAttribute("href");
+        if (!href || href === "#" || href.length < 2) return;
+        var target = document.getElementById(href.slice(1));
+        if (!target) return;
+        ev.preventDefault();
+        var navH = ($("#navbar") || {}).offsetHeight || 72;
+        var top =
+          target.getBoundingClientRect().top +
+          (window.pageYOffset || document.documentElement.scrollTop) -
+          navH - 12;
+        window.scrollTo({
+          top: top < 0 ? 0 : top,
+          behavior: reduceMotion ? "auto" : "smooth"
+        });
+        if (history.replaceState) history.replaceState(null, "", href);
+      });
+    });
+  }
+
+  /* ---------------- 7. Fade-in bertahap tombol sosial ---------------- */
+  function initSocialStagger() {
+    var rows = $$(".social-row");
+    if (!rows.length) return;
+
+    rows.forEach(function (row) {
+      var btns = $$(".social-btn", row);
+      btns.forEach(function (btn, i) {
+        btn.style.setProperty("--social-delay", i * 90 + "ms");
+      });
+
+      if (reduceMotion || !("IntersectionObserver" in window)) {
+        row.classList.add("is-in");
+        return;
+      }
+
+      // Baris yang sudah terlihat saat load langsung tampil.
+      var r = row.getBoundingClientRect();
+      if (r.top < window.innerHeight * 0.95 && r.bottom > 0) {
+        requestAnimationFrame(function () { row.classList.add("is-in"); });
+        return;
+      }
+
+      var io = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-in");
+              io.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.25 }
+      );
+      io.observe(row);
+    });
+
+    // Jaring pengaman: apa pun yang terjadi, semua tombol sosial tampil
+    // paling lambat 2,5 detik setelah load (mis. IO tidak pernah terpicu).
+    setTimeout(function () {
+      $$(".social-row:not(.is-in)").forEach(function (r) {
+        r.classList.add("is-in");
+      });
+    }, 2500);
+  }
+
+  /* ---------------- Boot ---------------- */
+  function boot() {
+    initScrollChrome();
+    initReveal();
+    initScrollSpy();
+    initCounters();
+    initTyping();
+    initSmoothAnchors();
+    initSocialStagger();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
+})();
+
+    </script>
+  </body>
+</html>
